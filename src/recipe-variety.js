@@ -1,5 +1,6 @@
 import {recipes} from './data.js';
 import {moreRecipes} from './more-recipes.js';
+import {seasonalRecipes} from './seasonal-recipes.js';
 const image={breakfast:'photo-1517673400267-0251440c45dc',lunch:'photo-1512621776951-a57141f2eefd',dinner:'photo-1473093295043-cdd812d0e601'};
 const additions=[
 ['breakfast','Apfel-Zimt-Porridge',15,410,20,[['Haferflocken',60,'g'],['Milch',200,'ml'],['Apfel',1,'Stk.'],['Zimt',2,'g']],['Apfel waschen, entkernen und würfeln.','Haferflocken mit Milch und Apfel 5–8 Minuten unter Rühren köcheln lassen.','Mit Zimt abschmecken und warm servieren.']],
@@ -20,4 +21,5 @@ const additions=[
 ];
 for(const [i,[meal,name,time,kcal,protein,ingredients,steps]]of additions.entries())recipes.push({id:`variety-${i}`,meal,name,time,kcal,protein,ingredients,steps,vegetarian:true,subtitle:'Frische Abwechslung für deinen Alltag',image:image[meal]});
 for(const [slug,meal,name,time,kcal,protein,vegetarian,ingredients,steps] of moreRecipes)recipes.push({id:`extra-${slug}`,meal,name,time,kcal,protein,vegetarian,ingredients,steps,subtitle:'Neue Ideen für deine abwechslungsreiche Woche',image:image[meal]});
+for(const [slug,meal,name,time,kcal,protein,vegetarian,ingredients,steps] of seasonalRecipes)recipes.push({id:`seasonal-${slug}`,meal,name,time,kcal,protein,vegetarian,ingredients,steps,subtitle:'Frisch gekocht. Einfach gut.',image:image[meal]});
 export function suggestions(date,meal,diet,seed=1,refresh=0){const pool=recipes.filter(r=>r.meal===meal&&(diet!=='Vegetarisch'||r.vegetarian));let x=2166136261;for(const c of `${seed}:${meal}`)x=Math.imul(x^c.charCodeAt(0),16777619)>>>0;for(let i=pool.length-1;i>0;i--){x=(Math.imul(x,1664525)+1013904223)>>>0;const j=x%(i+1);[pool[i],pool[j]]=[pool[j],pool[i]]}const day=Math.floor(Date.parse(date+'T12:00:00Z')/86400000);return Array.from({length:Math.min(3,pool.length)},(_,i)=>pool[((day*(pool.length>=21?3:pool.length%3===0?2:3)+refresh+i)%pool.length+pool.length)%pool.length]);}

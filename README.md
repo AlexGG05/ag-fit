@@ -1,18 +1,28 @@
 # ag fit
 
-Deutschsprachige Fitness-Webapp für die ganze Familie: persönliche Konten, Trainingspläne, abwechslungsreiche Wochenplanung, Rezepte und Einkaufslisten.
+Eine persönliche Ernährungs-App für zwei: Rezepte entdecken, eure Mahlzeiten planen und entspannt einkaufen – mit eigenen Konten und einer dauerhaften Datenbank.
 
-## Was die App kann
+## Für eure Ernährung
 
-- Registrierung mit Vorname, E-Mail und Passwort sowie Anmeldung und Abmeldung. Jedes Familienmitglied hat ein eigenes Konto mit getrennten Daten.
-- Profile, Mahlzeiten, Einkaufslisten und Trainingsfortschritt werden in SQLite auf dem Server gespeichert und nach Anmeldung auf anderen Geräten geladen.
-- Trainingsvorschläge nach Ziel, Erfahrung und 2–5 Trainingstagen.
-- Planung von heute bis sechs Tage im Voraus mit drei zufällig angeordneten Vorschlägen je Mahlzeit. Die Auswahl variiert zwischen allen sieben Tagen und zwischen Personen. Ein Pool aus 71 vollständigen Rezepten liefert auch vegetarische Vorschläge.
-- „Neue Vorschläge“ tauscht die Ideen einer Mahlzeit aus. Bereits gewählte Gerichte bleiben erhalten und lassen sich unter „Geplant“ öffnen oder abwählen. Die Vorschlagsfolge bleibt beim Neuladen stabil. Ohne manuelles Austauschen wiederholt sich innerhalb der nächsten sieben Tage kein Rezept in den Vorschlägen derselben Mahlzeit – auch bei vegetarischer Ernährung.
-- Pro Mahlzeit ein Rezept oder „Ich esse außerhalb / nichts planen“. Zutaten werden für 1–6 Personen zusammengefasst. Einkaufsliste abhaken und exportieren.
-- Zutatenmengen und Schritt-für-Schritt-Kochanleitungen für alle Rezepte.
+- **120 vollständige Rezepte** für Frühstück, Mittagessen und Abendessen, mit Mengen, Kochanleitungen und ungefähren Kalorien- und Proteinwerten.
+- Eine Rezeptbibliothek mit Suche nach Gericht oder Zutat, Mahlzeitenfiltern, schnellen Gerichten bis 25 Minuten, proteinreichen Gerichten ab 25 g Protein und persönlichen Favoriten.
+- Lokal mitgelieferte, KI-generierte Food-Bilder. Die 16 fotoähnlichen Serviervorschläge sind Gerichtskategorien zugeordnet und in der Oberfläche als KI-Bilder gekennzeichnet; sie zeigen nicht jedes Rezept exakt. Keine externen Bildaufrufe zur Laufzeit.
+- Persönlicher Tagesüberblick über geplante Kalorien und Protein pro Person. Der Kalorien-Planwert ist frei wählbar und keine automatische Bedarfsempfehlung. Die Anzeige erfasst geplante Gerichte, keine verzehrten Mahlzeiten.
+- Ein sieben Tage umfassender Wochenplan mit drei wechselnden Vorschlägen je Mahlzeit. Innerhalb einer Woche wiederholt sich ohne manuelles Austauschen kein Vorschlag derselben Mahlzeit, auch vegetarisch.
+- Freie Mahlzeiten automatisch füllen; bereits gewählte Gerichte und „Ich esse außerhalb“ bleiben erhalten. „Neue Vorschläge“ tauscht ausschließlich die angebotenen Ideen aus.
+- Rezepte für einen beliebigen Tag der kommenden Woche einplanen, Kochschritte abhaken und Zutaten für standardmäßig **zwei Portionen** anzeigen. Die Portionsgröße ist für das ganze Konto auf 1–6 einstellbar.
+- Eine automatisch summierte Einkaufsliste mit Abhaken, Textexport und Druckansicht.
+- Anmeldung und eigene Konten für euch beide. Profile, Favoriten, Wochenpläne und Einkaufslisten werden getrennt auf dem Server gespeichert und nach Anmeldung auf anderen Geräten geladen. Die beiden Konten teilen derzeit keinen Wochenplan und keine gemeinsame Liste.
 
-Die Gerichte werden aus einem hinterlegten Rezeptbestand zusammengestellt; die App erfindet keine Rezepte mit einem KI-Dienst. Wiederkehrende einzelne Gerichte sind möglich. Konten sind getrennt; eine gemeinsam synchronisierte Familien-Einkaufsliste gibt es noch nicht. Registrierung ist für Personen offen, die den Server erreichen können. Noch keine E-Mail-Verifizierung oder Passwort-Wiederherstellung. Alte Browserdaten aus der ersten Version werden nicht automatisch einem neuen Konto zugeordnet.
+Training und Workouts sind aus der Oberfläche entfernt. Bereits gespeicherte Konten und Daten bleiben beim Update erhalten; bestehende Portions- und Profilwerte werden respektiert. Alte Trainingsdaten werden nicht gelöscht, sind aber nicht mehr zugänglich über die Oberfläche.
+
+Die Gerichte stammen aus einem hinterlegten Rezeptbestand. Es gibt keinen Live-Import fremder Rezepte oder KI-Rezeptgenerierung. Noch keine E-Mail-Verifizierung oder Passwort-Wiederherstellung. Browserdaten der ursprünglichen lokalen Version werden nicht automatisch übernommen.
+
+## Zwei Konten, später erweiterbar
+
+Standardmäßig erlaubt der Server **maximal zwei Registrierungen**. Danach ist die Registrierung geschlossen; beide Personen können sich weiter anmelden. Bestehende Konten bleiben unabhängig vom Limit nutzbar. Es gibt keinen voreingestellten Benutzernamen oder ein Standardpasswort: Erstellt beim ersten Aufruf eure eigenen Konten.
+
+Für weitere Familienmitglieder später `MAX_USERS` in Compose beispielsweise auf `6` setzen und den Container neu erstellen. `MAX_USERS=0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt für alle Konten auf dieser Serverinstanz, nicht pro Haushalt. Einladungen und Kontolöschung sind noch nicht implementiert.
 
 ## Docker Compose: lokal oder Server
 
@@ -24,7 +34,7 @@ cd ag-fit
 docker compose up -d --build
 ```
 
-Auf Port **8080** die App öffnen und für jede Person ein Konto erstellen. Alternativer Host-Port: `AG_FIT_PORT=8090 docker compose up -d --build`.
+Auf Port **8080** die App öffnen und eure beiden Konten erstellen. Alternativer Host-Port: `AG_FIT_PORT=8090 docker compose up -d --build`.
 
 ```sh
 docker compose ps
@@ -50,6 +60,8 @@ services:
     image: ghcr.io/alexgg05/ag-fit:latest
     ports:
       - "8080:8080"
+    environment:
+      MAX_USERS: "2"
     volumes:
       - ag-fit-data:/data
     restart: unless-stopped
@@ -80,6 +92,8 @@ services:
       context: https://github.com/AlexGG05/ag-fit.git#main
     ports:
       - "8080:8080"
+    environment:
+      MAX_USERS: "2"
     volumes:
       - ag-fit-data:/data
     restart: unless-stopped
@@ -126,10 +140,12 @@ DATABASE_PATH=./.data/ag-fit.sqlite npm start
 
 Falls Port 8080 bereits belegt ist, den dort laufenden App-Container vorher stoppen oder den Vite-Proxy und `PORT` passend setzen. `npm run preview` liefert allein das Frontend aus und bietet keine Anmeldung; für Produktion `npm start` oder Docker verwenden.
 
-Konfiguration: `PORT` (Standard 8080), `DATABASE_PATH` (Standard `/data/ag-fit.sqlite`), `COOKIE_SECURE=true` für ausschließlich HTTPS. Sitzungen laufen nach 30 Tagen ab, Passwörter werden mit individuellen Salts und scrypt gehasht. Cookies sind HttpOnly und SameSite=Lax. Die API schützt gegen fremde Origins, begrenzt Anmeldeversuche und verhindert das stille Überschreiben zwischen Geräten: Bei einem Konflikt muss die Seite neu geladen werden.
+Konfiguration: `PORT` (Standard 8080), `DATABASE_PATH` (Standard `/data/ag-fit.sqlite`), `MAX_USERS` (Standard 2; 0 für unbegrenzt), `COOKIE_SECURE=true` für ausschließlich HTTPS. Sitzungen laufen nach 30 Tagen ab, Passwörter werden mit individuellen Salts und scrypt gehasht. Cookies sind HttpOnly und SameSite=Lax. Die API schützt gegen fremde Origins, begrenzt Anmeldeversuche und verhindert das stille Überschreiben zwischen Geräten: Bei einem Konflikt muss die Seite neu geladen werden.
 
 Für Builds hinter einem Unternehmensproxy unterstützt das Dockerfile das optionale BuildKit-Secret `build_ca` mit einem vertrauenswürdigen CA-Zertifikat. Es wird nur während der Installation eingebunden und nicht im Image gespeichert. Normale Docker-Hosts und GitHub Actions benötigen es nicht.
 
 ## Hinweise
 
-Trainingsvorschläge sind allgemeine Empfehlungen für gesunde Erwachsene. Nährwerte sind Schätzwerte; Allergien und individuelle Einschränkungen vor der Rezeptauswahl prüfen. Rezeptbilder sind lokale Illustrationen. Google Fonts werden optional geladen; ohne Zugriff verwendet die App Systemschriften.
+Nährwerte sind Schätzwerte. Allergien und individuelle Einschränkungen vor der Rezeptauswahl prüfen. Für Overnight-Rezepte kommt zur angegebenen aktiven Zubereitungszeit eine Kühlzeit über Nacht hinzu. Salz, Pfeffer und Wasser werden als Vorrat vorausgesetzt.
+
+Die Bilder in `public/food/meal-photos.png` wurden für dieses Projekt mit OpenAI-Bildgenerierung erstellt. Sie dienen als gekennzeichnete, beispielhafte Serviervorschläge für 16 Gerichtskategorien. Google Fonts werden optional geladen; ohne Zugriff verwendet die App Systemschriften.

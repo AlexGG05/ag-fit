@@ -7,7 +7,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const scrypt=promisify(scryptCallback);
 const hash=t=>createHash('sha256').update(t).digest('hex');
-export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false}={}){
+export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false,maxUsers=2}={}){
  const db=new DatabaseSync(database);db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,data TEXT NOT NULL DEFAULT \'{}\',revision INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);');
  const limits=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))};
@@ -20,6 +20,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
  const url=new URL(req.url,'http://localhost');
  if(url.pathname==='/health'){res.writeHead(200,{'Content-Type':'text/plain'});return res.end('ok')}
  if(url.pathname.startsWith('/api/')){
+  if(url.pathname==='/api/public'&&req.method==='GET'){const count=db.prepare('SELECT COUNT(*) AS count FROM users').get().count;return send(res,200,{registrationOpen:maxUsers===0||count<maxUsers,maxUsers})}
   if(!['GET','HEAD'].includes(req.method)&&req.headers.origin){let origin;try{origin=new URL(req.headers.origin)}catch{return send(res,403,{error:'Ungültiger Ursprung.'})}if(origin.host!==req.headers.host)return send(res,403,{error:'Anfrage von fremder Website abgelehnt.'})}
   if(['/api/register','/api/login'].includes(url.pathname)&&req.method==='POST'){
    const ip=req.socket.remoteAddress;const now=Date.now();let limit=limits.get(ip);if(!limit||now-limit.start>900000){limit={start:now,count:0};limits.set(ip,limit)}if(limits.size>10000)for(const [k,v]of limits)if(now-v.start>900000)limits.delete(k);if(++limit.count>30)return send(res,429,{error:'Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.'});
@@ -28,7 +29,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
    let user;
    if(url.pathname==='/api/register'){
     const name=typeof b.name==='string'?b.name.trim():'';if(!name||name.length>40)return send(res,400,{error:'Bitte einen Namen mit 1–40 Zeichen angeben.'});
-    const salt=randomBytes(16).toString('hex');const derived=await scrypt(password,salt,64);try{const result=db.prepare('INSERT INTO users(email,name,password) VALUES(?,?,?)').run(email,name,salt+':'+derived.toString('hex'));user=db.prepare('SELECT * FROM users WHERE id=?').get(result.lastInsertRowid)}catch(e){if(e.code?.includes('SQLITE_CONSTRAINT')||e.errcode===2067)return send(res,409,{error:'Registrierung nicht möglich. Nutze bei einem bestehenden Konto die Anmeldung.'});throw e}
+    const salt=randomBytes(16).toString('hex');const derived=await scrypt(password,salt,64);if(maxUsers>0&&db.prepare('SELECT COUNT(*) AS count FROM users').get().count>=maxUsers)return send(res,403,{error:'Die Registrierung ist geschlossen. Die verfügbaren Konten sind bereits vergeben.'});try{const result=db.prepare('INSERT INTO users(email,name,password) VALUES(?,?,?)').run(email,name,salt+':'+derived.toString('hex'));user=db.prepare('SELECT * FROM users WHERE id=?').get(result.lastInsertRowid)}catch(e){if(e.code?.includes('SQLITE_CONSTRAINT')||e.errcode===2067)return send(res,409,{error:'Registrierung nicht möglich. Nutze bei einem bestehenden Konto die Anmeldung.'});throw e}
    }else{
     user=db.prepare('SELECT * FROM users WHERE email=?').get(email);const [salt,stored]=(user?.password||'00000000000000000000000000000000:'+ '00'.repeat(64)).split(':');const actual=await scrypt(password,salt,64);if(!user||!timingSafeEqual(actual,Buffer.from(stored,'hex')))return send(res,401,{error:'E-Mail oder Passwort stimmen nicht.'});
    }
@@ -47,4 +48,4 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
  }catch(e){if(!res.headersSent)send(res,e.status||500,{error:e.status?e.message:'Serverfehler. Bitte versuche es erneut.'});else res.end()}});
  return {server,close:()=>db.close()};
 }
-if(process.argv[1]&&fileURLToPath(import.meta.url)===path.resolve(process.argv[1])){const database=process.env.DATABASE_PATH||'/data/ag-fit.sqlite';await mkdir(path.dirname(database),{recursive:true});const {server,close}=createApp({database,secureCookies:process.env.COOKIE_SECURE==='true'});for(const signal of ['SIGTERM','SIGINT'])process.once(signal,()=>server.close(()=>{close();process.exit(0)}));server.listen(Number(process.env.PORT)||8080,'0.0.0.0',()=>console.log('ag fit läuft auf Port '+(process.env.PORT||8080)))}
+if(process.argv[1]&&fileURLToPath(import.meta.url)===path.resolve(process.argv[1])){const database=process.env.DATABASE_PATH||'/data/ag-fit.sqlite';await mkdir(path.dirname(database),{recursive:true});const maxUsers=Number(process.env.MAX_USERS??2);if(!Number.isSafeInteger(maxUsers)||maxUsers<0)throw Error('MAX_USERS muss eine ganze Zahl ab 0 sein.');const {server,close}=createApp({database,secureCookies:process.env.COOKIE_SECURE==='true',maxUsers});for(const signal of ['SIGTERM','SIGINT'])process.once(signal,()=>server.close(()=>{close();process.exit(0)}));server.listen(Number(process.env.PORT)||8080,'0.0.0.0',()=>console.log('ag fit läuft auf Port '+(process.env.PORT||8080)))}
