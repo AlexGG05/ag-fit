@@ -1,16 +1,16 @@
 import {recipes,mealTypes} from './data.js';
 import {suggestions} from './recipe-variety.js';
 export {recipes,mealTypes,suggestions};
-export function searchRecipes({search='',meal='all',vegetarian=false,quick=false,highProtein=false,favorites=null}={}){
+export function searchRecipes({search='',meal='all',vegetarian=false,quick=false,highProtein=false,favorites=null,catalog=recipes}={}){
  const query=search.toLocaleLowerCase('de').trim();
- return recipes.filter(r=>(meal==='all'||r.meal===meal)&&(!vegetarian||r.vegetarian)&&(!quick||r.time<=25)&&(!highProtein||r.protein>=25)&&(!favorites||favorites.includes(r.id))&&(!query||[r.name,...r.ingredients.map(i=>i[0])].join(' ').toLocaleLowerCase('de').includes(query)));
+ return catalog.filter(r=>!r.archived&&(meal==='all'||r.meal===meal)&&(!vegetarian||r.vegetarian)&&(!quick||r.time<=25)&&(!highProtein||r.protein>=25)&&(!favorites||favorites.includes(r.id))&&(!query||[r.name,...r.ingredients.map(i=>i[0])].join(' ').toLocaleLowerCase('de').includes(query)));
 }
-export function fillWeek(plan,dates,diet,seed,refreshes={}){
+export function fillWeek(plan,dates,diet,seed,refreshes={},catalog=recipes){
  const next={...plan};
- for(const date of dates)for(const meal of mealTypes){const key=`${date.key}:${meal.id}`;if(!next[key])next[key]=suggestions(date.key,meal.id,diet,seed,refreshes[key]||0)[0].id;}
+ for(const date of dates)for(const meal of mealTypes){const key=`${date.key}:${meal.id}`;if(!next[key])next[key]=suggestions(date.key,meal.id,diet,seed,refreshes[key]||0,catalog)[0]?.id;}
  return next;
 }
-export function plannedNutrition(plan,date){return mealTypes.reduce((total,meal)=>{const recipe=recipes.find(r=>r.id===plan[`${date}:${meal.id}`]);if(recipe){total.kcal+=recipe.kcal;total.protein+=recipe.protein;total.count++}return total},{kcal:0,protein:0,count:0});}
+export function plannedNutrition(plan,date,catalog=recipes){return mealTypes.reduce((total,meal)=>{const recipe=catalog.find(r=>r.id===plan[`${date}:${meal.id}`]);if(recipe){total.kcal+=recipe.kcal??0;total.protein+=recipe.protein??0;total.count++}return total},{kcal:0,protein:0,count:0});}
 const rows=[{y:0,h:300},{y:300,h:295},{y:595,h:296},{y:891,h:363}];
 export function photoFrame(recipe){
  const name=recipe.name.toLowerCase();let index=4;

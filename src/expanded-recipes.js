@@ -1,7 +1,7 @@
 // Curated combinations with reusable cooking methods, stable IDs and per-person quantities.
 // These are complete recipes, not runtime-generated permutations.
 const I=(name,amount,unit='g')=>[name,amount,unit];
-const kcalProtein={
+export const kcalProtein={
 'Haferflocken':[370,13],'Dinkelflocken':[350,14],'Hirse':[360,11],'Buchweizen':[340,13],'Quinoa':[370,14],'Milch':[47,3.4],'Haferdrink':[45,1],'Naturjoghurt':[65,4],'Skyr':[65,11],'Magerquark':[70,12],'Sojajoghurt':[50,4],'Hüttenkäse':[100,12],'Frischkäse':[240,6],'Ricotta':[170,11],
 'Banane':[90,1],'Apfel':[52,.3],'Birne':[57,.4],'Mango':[60,.8],'Pfirsich':[40,.9],'Nektarine':[44,1],'Aprikosen':[48,1],'Pflaumen':[46,.7],'Erdbeeren':[32,.7],'Himbeeren':[45,1],'Heidelbeeren':[50,.7],'Beeren':[45,1],'Kiwi':[61,1],'Orange':[47,.9],'Ananas':[50,.5],'Trauben':[69,.7],'Kirschen, entsteint':[60,1],
 'Walnüsse':[650,15],'Mandeln':[600,21],'Pistazien, geschält':[570,20],'Haselnüsse':[630,15],'Cashewkerne':[560,18],'Kürbiskerne':[560,30],'Sonnenblumenkerne':[580,21],'Sesam':[570,18],'Chiasamen':[490,17],'Leinsamen':[530,18],'Kokosraspeln':[660,7],'Erdnussmus':[600,25],'Mandelmus':[620,21],'Honig':[300,0],'Backkakao':[350,20],'Zimt':[250,4],
@@ -11,7 +11,7 @@ const kcalProtein={
 'Kartoffeln':[75,2],'Süßkartoffel':[85,2],'Karotten':[40,1],'Brokkoli':[35,3],'Blumenkohl':[25,2],'Zucchini':[20,1.5],'Aubergine':[25,1],'Hokkaidokürbis':[65,2],'Spinat':[25,3],'Paprika':[30,1],'Tomaten':[20,1],'Tomaten, passiert':[30,1],'Gurke':[15,.7],'Champignons':[25,3],'Lauch':[35,1.5],'Fenchel':[30,1],'Mangold':[20,2],'Grünkohl':[45,4],'Rote Bete, gegart':[45,2],'Rucola':[25,2.5],'Römersalat':[15,1],'Rotkohl':[30,1],'Weißkohl':[25,1],'Zuckererbsen':[40,3],'Grüne Bohnen':[30,2],'Radieschen':[15,1],'Sellerieknolle':[35,1.5],
 'Feta':[260,15],'Mozzarella':[250,18],'Gouda':[350,25],'Parmesan, vegetarisch':[390,32],'Halloumi, vegetarisch':[320,22],'Olivenöl':[880,0],'Rapsöl':[880,0],'Kokosmilch':[180,2],'Tahini':[600,17],'Sojasauce':[55,8],'Senf':[80,5],'Zitrone':[30,1],'Limette':[30,.5],'Petersilie':[35,3],'Basilikum':[25,3],'Schnittlauch':[30,3],'Dill':[40,3],'Minze':[40,3],'Ingwer':[80,2],'Currypulver':[300,12],'Paprikapulver':[280,14],'Kreuzkümmel':[375,18],'Knoblauch':[140,6],'Zwiebel':[40,1],'Rosinen':[300,3]
 };
-const unitWeight={'Eier':60,'Banane':120,'Apfel':150,'Birne':160,'Mango':300,'Pfirsich':140,'Nektarine':140,'Aprikosen':40,'Pflaumen':50,'Kiwi':80,'Orange':160,'Paprika':150,'Gurke':300,'Avocado':150,'Zitrone':100,'Limette':70,'Vollkornwraps':60,'Vollkornpita':80,'Zwiebel':100,'Knoblauch':5};
+export const unitWeight={'Eier':60,'Banane':120,'Apfel':150,'Birne':160,'Mango':300,'Pfirsich':140,'Nektarine':140,'Aprikosen':40,'Pflaumen':50,'Kiwi':80,'Orange':160,'Paprika':150,'Gurke':300,'Avocado':150,'Zitrone':100,'Limette':70,'Vollkornwraps':60,'Vollkornpita':80,'Zwiebel':100,'Knoblauch':5};
 function nutrition(ingredients){let kcal=0,protein=0;for(const [name,amount,unit]of ingredients){const fact=kcalProtein[name];if(!fact)throw Error('Missing nutrition reference: '+name);const weight=unit==='Stk.'?amount*(unitWeight[name]||100):amount;kcal+=fact[0]*weight/100;protein+=fact[1]*weight/100;}return {kcal:Math.round(kcal/5)*5,protein:Math.round(protein)}}
 export const expandedRecipes=[];
 function add(slug,meal,name,time,ingredients,steps,vegetarian=true){expandedRecipes.push({id:`collection-${slug}`,meal,name,time,vegetarian,ingredients,steps,...nutrition(ingredients),subtitle:'Neue Lieblingsgerichte für euren Alltag'})}

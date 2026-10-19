@@ -28,11 +28,11 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [ ] Keine ungeprüften Produktallergene als sicher deklarieren.
 
 ### 5. Ernährungstagebuch
-- [ ] Geplante Mahlzeiten als tatsächlich gegessen markieren; Datum, Portionen und Mengen ändern.
-- [ ] Snacks, Getränke und einzelne Lebensmittel unabhängig vom Plan erfassen.
-- [ ] Tatsächliche Kalorien, Protein, Kohlenhydrate und Fett getrennt von geplanten Werten darstellen.
-- [ ] Einträge bearbeiten/löschen, vergangene Tage anzeigen und doppelte Buchungen verhindern.
-- [ ] Nährwerte als Schätzwerte kennzeichnen; keine automatischen medizinischen Empfehlungen.
+- [x] Geplante Mahlzeiten als tatsächlich gegessen markieren; Datum, Portionen und Mengen ändern.
+- [x] Snacks, Getränke und einzelne Lebensmittel unabhängig vom Plan erfassen.
+- [x] Tatsächliche Kalorien, Protein, Kohlenhydrate und Fett getrennt von geplanten Werten darstellen.
+- [x] Einträge bearbeiten/löschen, vergangene Tage anzeigen und doppelte Buchungen verhindern.
+- [x] Nährwerte als Schätzwerte kennzeichnen; keine automatischen medizinischen Empfehlungen.
 
 ### 6. Lebensmittelbudget
 - [ ] Optionales Wochenbudget pro Haushalt festlegen.
@@ -41,11 +41,11 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [ ] Fehlende Preise kenntlich machen, nicht als 0 € interpretieren; keine unbelegten Live-Supermarktpreise behaupten.
 
 ### 7. Eigene Rezepte
-- [ ] Rezepte mit Titel, Zutaten, Mengen, Einheiten, Portionen, Schritten, Dauer, Tags und optional Bild anlegen/bearbeiten/löschen.
-- [ ] Nährwerte aus hinterlegten Zutaten berechnen, fehlende Werte manuell ergänzen.
-- [ ] Eigene Rezepte in Suche, Favoriten, Wochenplan und Einkaufsliste integrieren.
-- [ ] Optional URL-Import als spätere Teilfunktion, mit Vorschau und manueller Bestätigung; keine beliebigen Server-URL-Abrufe ohne SSRF-Schutz.
-- [ ] Eigentümerschaft und Haushaltsfreigabe berücksichtigen.
+- [x] Rezepte mit Titel, Zutaten, Mengen, Einheiten, Portionen, Schritten, Dauer, Tags und optional Bild anlegen/bearbeiten/löschen.
+- [x] Nährwerte aus hinterlegten Zutaten berechnen, fehlende Werte manuell ergänzen.
+- [x] Eigene Rezepte in Suche, Favoriten, Wochenplan und Einkaufsliste integrieren.
+- [x] Optional URL-Import als spätere Teilfunktion, mit Vorschau und manueller Bestätigung; keine beliebigen Server-URL-Abrufe ohne SSRF-Schutz.
+- [x] Eigentümerschaft und Haushaltsfreigabe berücksichtigen.
 
 ### 8. Ernährungsstatistiken
 - [ ] Tages-, Wochen- und Monatsansichten für tatsächlich erfasste Kalorien und Makros.
@@ -73,3 +73,5 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 
 - Abschnitt 1: `node --test server/household.test.js` erfolgreich; Produktionsbuild erfolgreich. Geprüft: Einladungen, gemeinsame Änderungen, Konflikte, Berechtigungen und Erhalt persönlicher Daten.
 - Die GitHub-API ist aktuell durch die Netzwerkregel für `api.github.com` blockiert (CONNECT 403). Diese Datei dokumentiert den Stand; die Checklisten im Online-Issue wurden noch nicht geändert.
+
+- Abschnitte 5 und 7: `node --test server/diary-recipes.test.js` erfolgreich; Produktionsbuild erfolgreich. Geprüft: Portions-/100-ml-Rechnung, Duplikatschutz, Eintragsbearbeitung, Fremdzugriff, Freigabe, unbekannte Nährwerte und historische Snapshots. URL-Import bleibt ausdrücklich die im Issue erlaubte spätere Teilfunktion; es gibt keinen Server-Abruf beliebiger Rezept-URLs.

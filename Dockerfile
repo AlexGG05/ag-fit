@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --chown=node:node --chmod=644 server.js ./server.js
 COPY --chown=node:node server ./server
+COPY --from=build --chown=node:node /app/src ./src
 COPY --chown=node:node --chmod=644 package.json ./package.json
 RUN mkdir /data && chown node:node /data
 USER node
