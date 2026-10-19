@@ -14,11 +14,11 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [ ] Vorschläge nachvollziehbar anzeigen; fehlende passende Rezepte sauber behandeln.
 
 ### 3. Vorratskammer/Kühlschrank
-- [ ] Vorräte mit Produkt, Menge, Einheit, optional Lagerort und MHD erfassen, ändern, löschen.
-- [ ] Bald ablaufende Lebensmittel hervorheben.
-- [ ] Rezeptvorschläge mit vorhandenen Zutaten und fehlenden Mengen.
-- [ ] Einkaufslisten um verfügbare Vorräte reduzieren; Mengen/Einheiten sauber normalisieren.
-- [ ] Verbrauch nur nach ausdrücklicher Bestätigung buchen.
+- [x] Vorräte mit Produkt, Menge, Einheit, optional Lagerort und MHD erfassen, ändern, löschen.
+- [x] Bald ablaufende Lebensmittel hervorheben.
+- [x] Rezeptvorschläge mit vorhandenen Zutaten und fehlenden Mengen.
+- [x] Einkaufslisten um verfügbare Vorräte reduzieren; Mengen/Einheiten sauber normalisieren.
+- [x] Verbrauch nur nach ausdrücklicher Bestätigung buchen.
 
 ### 4. Barcode-Scanner
 - [ ] Mobilen Kamerascanner sowie manuelle EAN-Eingabe anbieten.
@@ -75,3 +75,5 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - Die GitHub-API ist aktuell durch die Netzwerkregel für `api.github.com` blockiert (CONNECT 403). Diese Datei dokumentiert den Stand; die Checklisten im Online-Issue wurden noch nicht geändert.
 
 - Abschnitte 5 und 7: `node --test server/diary-recipes.test.js` erfolgreich; Produktionsbuild erfolgreich. Geprüft: Portions-/100-ml-Rechnung, Duplikatschutz, Eintragsbearbeitung, Fremdzugriff, Freigabe, unbekannte Nährwerte und historische Snapshots. URL-Import bleibt ausdrücklich die im Issue erlaubte spätere Teilfunktion; es gibt keinen Server-Abruf beliebiger Rezept-URLs.
+
+- Abschnitt 3: `node --test src/pantry.test.js server/pantry.test.js` erfolgreich. Geprüft: kg/g und l/ml, inkompatible Einheiten, MHD-Reihenfolge, Eigentümerschaft/Haushalt, Versionskonflikte und ausdrückliche, idempotente Entnahme.

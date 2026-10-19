@@ -1,4 +1,5 @@
 import http from 'node:http';
+import {migratePantry,pantryRoute} from './server/pantry.js';
 import {recipes} from './src/nutrition.js';
 import {migrateRecipes,recipeRoute,ownRecipes} from './server/recipes.js';
 import {migrateDiary,diaryRoute} from './server/diary.js';
@@ -13,7 +14,7 @@ const scrypt=promisify(scryptCallback);
 const hash=t=>createHash('sha256').update(t).digest('hex');
 export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false,maxUsers=2}={}){
  const db=new DatabaseSync(database);db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,data TEXT NOT NULL DEFAULT \'{}\',revision INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);');
- migrate(db);migrateDiary(db);migrateRecipes(db);
+ migrate(db);migrateDiary(db);migrateRecipes(db);migratePantry(db);
  const limits=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))};
  const cookie=(req,res,token,age)=>res.setHeader('Set-Cookie',`ag_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${secureCookies||req.headers['x-forwarded-proto']==='https'?'; Secure':''}`);
@@ -44,6 +45,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
   if(url.pathname==='/api/me'&&req.method==='GET')return send(res,200,workspace(db,user));
   if(url.pathname==='/api/logout'&&req.method==='POST'){const t=req.headers.cookie?.match(/ag_session=([a-f0-9]{64})/)?.[1];if(t)db.prepare('DELETE FROM sessions WHERE token=?').run(hash(t));cookie(req,res,'',0);return send(res,200,{ok:true})}
   if(url.pathname==='/api/state'&&req.method==='PUT')return send(res,200,saveState(db,user,await body(req)));
+  const pantryResult=await pantryRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req),resolveRecipe:id=>[...recipes,...ownRecipes(db,user.id)].find(r=>r.id===id)});if(pantryResult!==null)return send(res,200,pantryResult);
   const recipeResult=await recipeRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(recipeResult!==null)return send(res,200,recipeResult);
   const diaryResult=await diaryRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req),resolveRecipe:id=>[...recipes,...ownRecipes(db,user.id)].find(r=>r.id===id)});if(diaryResult!==null)return send(res,200,diaryResult);
   const householdResult=await householdRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(householdResult!==null)return send(res,200,householdResult);
