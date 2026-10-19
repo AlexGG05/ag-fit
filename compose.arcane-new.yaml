@@ -1,0 +1,31 @@
+services:
+  ag-fit:
+    image: ghcr.io/alexgg05/ag-fit:latest
+    ports:
+      - "8082:8080"
+    environment:
+      MAX_USERS: "2"
+      APP_URL: "https://fit.agrosskopf.de"
+      COOKIE_SECURE: "true"
+      DATABASE_PATH: "/data/ag-fit.sqlite"
+      REQUIRE_EXISTING_DATABASE: "${REQUIRE_EXISTING_DATABASE:-false}"
+      EMAIL_VERIFICATION_REQUIRED: "true"
+      SMTP_HOST: "smtp.ionos.de"
+      SMTP_PORT: "587"
+      SMTP_FROM: "ag fit <noreply@agrosskopf.de>"
+      SMTP_USER: "noreply@agrosskopf.de"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:?IONOS-Mailbox-Passwort in Arcane hinterlegen}"
+    volumes:
+      - ag-fit-data:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+volumes:
+  ag-fit-data:
+    name: "${AG_FIT_DATA_VOLUME:-ag-fit-data}"

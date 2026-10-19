@@ -2,6 +2,17 @@
 
 Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 270 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
 
+## Neuinstallation nach gelöschtem Datenvolume
+
+Wenn das bisherige Datenvolume bereits gelöscht wurde und kein Backup vorhanden ist, können die alten Konten und Pläne nicht wiederhergestellt werden. Verwende dann [compose.arcane-new.yaml](compose.arcane-new.yaml) statt der Wiederherstellungs-Konfiguration. Diese Datei erstellt automatisch das fest benannte Volume `ag-fit-data`, bindet es unter `/data` ein und erlaubt beim ersten Start eine neue Datenbank. Container löschen oder erneut deployen behält dieses benannte Volume bei; das Volume selbst darf nicht gelöscht werden.
+
+1. In Arcane die Compose-Datei durch den Inhalt von `compose.arcane-new.yaml` ersetzen. Port **8082**, Adresse **https://fit.agrosskopf.de** und IONOS sind vorbereitet.
+2. In den Projektvariablen **`SMTP_PASSWORD`** mit dem Passwort der Mailbox `noreply@agrosskopf.de` hinterlegen. Eine alte Variable `AG_FIT_DATA_VOLUME`, die auf ein gelöschtes Volume zeigt, entfernen oder ausdrücklich auf `ag-fit-data` setzen. Für den ersten Start `REQUIRE_EXISTING_DATABASE=false` setzen, falls die Variable bisher `true` war.
+3. Nach erfolgreichem GitHub-Image-Build das aktuelle Image ziehen und neu deployen. Konten neu registrieren und per E-Mail aktivieren.
+4. Nach dem ersten erfolgreichen Start **`REQUIRE_EXISTING_DATABASE=true`** setzen und erneut deployen. Das vorhandene Volume bleibt gleich; bei später fehlender Datenbank bricht die App dann ab, statt leer neu zu starten.
+
+Falls doch noch ein Backup vorhanden ist, zuerst dieses in ein Datenvolume wiederherstellen und die folgende Konfiguration für bestehende Daten verwenden.
+
 ## Wichtig für das bestehende Arcane-Deployment
 
 Die bisher verwendete Compose-Datei ohne `volumes:` bindet **kein dauerhaft zugeordnetes Datenvolume** ein. Das Dockerfile erstellt dann ein anonymes `/data`-Volume; beim Neuerstellen kann ein neues leeres Volume entstehen. Ein verlorenes Cookie erfordert nur eine Anmeldung, keine erneute Registrierung. Konten werden mit Passwort-Hash in SQLite gespeichert.
