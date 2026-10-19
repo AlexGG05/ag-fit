@@ -1,0 +1,4 @@
+import {canonicalName} from './food.js';
+import {stockQuantity} from './pantry.js';
+export function estimatePrice(ingredients,prices=[]){let known=0;const missing=[];for(const ingredient of ingredients){const [name,amount,unit]=Array.isArray(ingredient)?ingredient:[ingredient.name,ingredient.amount,ingredient.unit];const needed=stockQuantity(name,amount,unit);const price=prices.find(p=>canonicalName(p.name)===canonicalName(name)&&stockQuantity(p.name,p.amount,p.unit).unit===needed.unit);if(!price){missing.push(name);continue}const reference=stockQuantity(price.name,price.amount,price.unit);known+=needed.amount/reference.amount*price.price;}return {total:missing.length?null:Math.round(known*100)/100,known:Math.round(known*100)/100,missing:[...new Set(missing)]}}
+export function recipePrice(recipe,prices,servings=1){return estimatePrice(recipe.ingredients.map(([n,a,u])=>[n,a*servings,u]),prices)}

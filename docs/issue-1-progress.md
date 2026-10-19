@@ -8,10 +8,10 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [x] Einzelkonten ohne Haushalt weiterhin unterstützen.
 
 ### 2. Intelligenter Wochenplaner
-- [ ] Vorschläge nach Ernährungsform, Allergenen/Ausschlüssen, Vorlieben, Kochzeit, Kalorien-/Proteinzielen und optional Budget filtern.
-- [ ] Vorhandene Vorräte bevorzugen, Wiederholungen vermeiden und Vielfalt sichern.
-- [ ] Manuell geplante Mahlzeiten und „Ich esse außerhalb“ nicht überschreiben.
-- [ ] Vorschläge nachvollziehbar anzeigen; fehlende passende Rezepte sauber behandeln.
+- [x] Vorschläge nach Ernährungsform, Allergenen/Ausschlüssen, Vorlieben, Kochzeit, Kalorien-/Proteinzielen und optional Budget filtern.
+- [x] Vorhandene Vorräte bevorzugen, Wiederholungen vermeiden und Vielfalt sichern.
+- [x] Manuell geplante Mahlzeiten und „Ich esse außerhalb“ nicht überschreiben.
+- [x] Vorschläge nachvollziehbar anzeigen; fehlende passende Rezepte sauber behandeln.
 
 ### 3. Vorratskammer/Kühlschrank
 - [x] Vorräte mit Produkt, Menge, Einheit, optional Lagerort und MHD erfassen, ändern, löschen.
@@ -35,10 +35,10 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [x] Nährwerte als Schätzwerte kennzeichnen; keine automatischen medizinischen Empfehlungen.
 
 ### 6. Lebensmittelbudget
-- [ ] Optionales Wochenbudget pro Haushalt festlegen.
-- [ ] Rezept- und Einkaufslistenpreise anhand editierbarer Produkt-/Einheitspreise schätzen.
-- [ ] Kosten pro Rezept, Portion und Woche anzeigen; günstigere passende Alternativen vorschlagen.
-- [ ] Fehlende Preise kenntlich machen, nicht als 0 € interpretieren; keine unbelegten Live-Supermarktpreise behaupten.
+- [x] Optionales Wochenbudget pro Haushalt festlegen.
+- [x] Rezept- und Einkaufslistenpreise anhand editierbarer Produkt-/Einheitspreise schätzen.
+- [x] Kosten pro Rezept, Portion und Woche anzeigen; günstigere passende Alternativen vorschlagen.
+- [x] Fehlende Preise kenntlich machen, nicht als 0 € interpretieren; keine unbelegten Live-Supermarktpreise behaupten.
 
 ### 7. Eigene Rezepte
 - [x] Rezepte mit Titel, Zutaten, Mengen, Einheiten, Portionen, Schritten, Dauer, Tags und optional Bild anlegen/bearbeiten/löschen.
@@ -77,3 +77,5 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - Abschnitte 5 und 7: `node --test server/diary-recipes.test.js` erfolgreich; Produktionsbuild erfolgreich. Geprüft: Portions-/100-ml-Rechnung, Duplikatschutz, Eintragsbearbeitung, Fremdzugriff, Freigabe, unbekannte Nährwerte und historische Snapshots. URL-Import bleibt ausdrücklich die im Issue erlaubte spätere Teilfunktion; es gibt keinen Server-Abruf beliebiger Rezept-URLs.
 
 - Abschnitt 3: `node --test src/pantry.test.js server/pantry.test.js` erfolgreich. Geprüft: kg/g und l/ml, inkompatible Einheiten, MHD-Reihenfolge, Eigentümerschaft/Haushalt, Versionskonflikte und ausdrückliche, idempotente Entnahme.
+
+- Abschnitte 2 und 6: `node --test src/planner.test.js src/pricing.test.js server/prices.test.js` erfolgreich. Geprüft: Ernährungs-/Allergen-/Ziel- und Kochzeitfilter, Vorratspriorisierung, leere Treffer, geschützte manuelle Pläne, Preisbezugsrechnung, unbekannte Preise, Budget ohne doppelte Vorratsanrechnung, Zugriffsschutz und Versionskonflikte.

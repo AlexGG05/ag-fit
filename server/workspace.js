@@ -1,3 +1,4 @@
+import {priceRows} from './prices.js';
 import {pantryRows} from './pantry.js';
 import {ownRecipes} from './recipes.js';
 import {diaryEntries} from './diary.js';
@@ -12,7 +13,7 @@ export function migrate(db){
 }
 export function membership(db,userId){return db.prepare('SELECT h.* FROM households h JOIN household_members m ON m.household_id=h.id WHERE m.user_id=?').get(userId)}
 export function workspace(db,user){const household=membership(db,user.id);let data=JSON.parse(user.data);if(household){const shared=JSON.parse(household.data);for(const key of sharedKeys){delete data[key];if(Object.hasOwn(shared,key))data[key]=shared[key]}}
- return {pantry:pantryRows(db,user.id),customRecipes:ownRecipes(db,user.id),entries:diaryEntries(db,user.id),user:{id:user.id,name:user.name,email:user.email},data,revision:user.revision,householdRevision:household?.revision??null,household:household?{id:household.id,name:household.name,ownerId:household.owner_id,members:db.prepare('SELECT u.id,u.name FROM users u JOIN household_members m ON m.user_id=u.id WHERE m.household_id=?').all(household.id)}:null};}
+ return {prices:priceRows(db,user.id),pantry:pantryRows(db,user.id),customRecipes:ownRecipes(db,user.id),entries:diaryEntries(db,user.id),user:{id:user.id,name:user.name,email:user.email},data,revision:user.revision,householdRevision:household?.revision??null,household:household?{id:household.id,name:household.name,ownerId:household.owner_id,members:db.prepare('SELECT u.id,u.name FROM users u JOIN household_members m ON m.user_id=u.id WHERE m.household_id=?').all(household.id)}:null};}
 export function fail(status,message){throw Object.assign(Error(message),{status})}
 export function text(value,max=200,required=true){if(typeof value!=='string'||value.trim().length>max||(required&&!value.trim()))fail(400,'Bitte einen gültigen Text eingeben.');return value.trim()}
 export function transaction(db,fn){db.exec('BEGIN IMMEDIATE');try{const result=fn();db.exec('COMMIT');return result}catch(e){db.exec('ROLLBACK');throw e}}
