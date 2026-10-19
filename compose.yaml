@@ -3,6 +3,10 @@ services:
     build: .
     ports:
       - "${AG_FIT_PORT:-8080}:8080"
+    volumes:
+      - ag-fit-data:/data
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+volumes:
+  ag-fit-data:
