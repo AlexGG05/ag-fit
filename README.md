@@ -4,19 +4,30 @@ Eine persönliche Ernährungs-App für zwei: Rezepte entdecken, eure Mahlzeiten 
 
 ## Für eure Ernährung
 
-- **120 vollständige Rezepte** für Frühstück, Mittagessen und Abendessen, mit Mengen, Kochanleitungen und ungefähren Kalorien- und Proteinwerten.
-- Eine Rezeptbibliothek mit Suche nach Gericht oder Zutat, Mahlzeitenfiltern, schnellen Gerichten bis 25 Minuten, proteinreichen Gerichten ab 25 g Protein und persönlichen Favoriten.
+- **270 vollständige Rezepte** für Frühstück, Mittagessen und Abendessen, mit Mengen, Kochanleitungen und ungefähren Kalorien- und Proteinwerten.
+- Eine Rezeptbibliothek mit Suche nach Gericht oder Zutat, Mahlzeitenfiltern, schnellen Gerichten bis 25 Minuten, proteinreichen Gerichten ab 25 g Protein und einer eigenen Favoritenansicht.
 - Lokal mitgelieferte, KI-generierte Food-Bilder. Die 16 fotoähnlichen Serviervorschläge sind Gerichtskategorien zugeordnet und in der Oberfläche als KI-Bilder gekennzeichnet; sie zeigen nicht jedes Rezept exakt. Keine externen Bildaufrufe zur Laufzeit.
 - Persönlicher Tagesüberblick über geplante Kalorien und Protein pro Person. Der Kalorien-Planwert ist frei wählbar und keine automatische Bedarfsempfehlung. Die Anzeige erfasst geplante Gerichte, keine verzehrten Mahlzeiten.
-- Ein sieben Tage umfassender Wochenplan mit drei wechselnden Vorschlägen je Mahlzeit. Innerhalb einer Woche wiederholt sich ohne manuelles Austauschen kein Vorschlag derselben Mahlzeit, auch vegetarisch.
+- Ein sieben Tage umfassender Wochenplan mit drei wechselnden Vorschlägen je Mahlzeit. Ohne manuelles Austauschen wiederholt sich mindestens 24 Tage lang kein Vorschlag derselben Mahlzeit, auch vegetarisch. Die erste automatische Empfehlung durchläuft den gesamten passenden Bestand, statt nur einen Teil der Rezepte zu nutzen.
 - Freie Mahlzeiten automatisch füllen; bereits gewählte Gerichte und „Ich esse außerhalb“ bleiben erhalten. „Neue Vorschläge“ tauscht ausschließlich die angebotenen Ideen aus.
-- Rezepte für einen beliebigen Tag der kommenden Woche einplanen, Kochschritte abhaken und Zutaten für standardmäßig **zwei Portionen** anzeigen. Die Portionsgröße ist für das ganze Konto auf 1–6 einstellbar.
+- Rezepte für einen beliebigen Tag und jede Mahlzeit der kommenden Woche einplanen, Kochschritte abhaken und Zutaten für standardmäßig **zwei Portionen** anzeigen. Die Portionsgröße ist für das ganze Konto auf 1–6 einstellbar.
 - Eine automatisch summierte Einkaufsliste mit Abhaken, Textexport und Druckansicht.
 - Anmeldung und eigene Konten für euch beide. Profile, Favoriten, Wochenpläne und Einkaufslisten werden getrennt auf dem Server gespeichert und nach Anmeldung auf anderen Geräten geladen. Die beiden Konten teilen derzeit keinen Wochenplan und keine gemeinsame Liste.
 
 Training und Workouts sind aus der Oberfläche entfernt. Bereits gespeicherte Konten und Daten bleiben beim Update erhalten; bestehende Portions- und Profilwerte werden respektiert. Alte Trainingsdaten werden nicht gelöscht, sind aber nicht mehr zugänglich über die Oberfläche.
 
 Die Gerichte stammen aus einem hinterlegten Rezeptbestand. Es gibt keinen Live-Import fremder Rezepte oder KI-Rezeptgenerierung. Noch keine E-Mail-Verifizierung oder Passwort-Wiederherstellung. Browserdaten der ursprünglichen lokalen Version werden nicht automatisch übernommen.
+
+## Lieblingsgerichte gezielt einplanen
+
+1. Bei einem Rezept auf das **Herz** tippen, um es als Favorit zu speichern. Das geht auf Rezeptkarten und im geöffneten Rezept.
+2. **Meine Favoriten** in der Navigation öffnen. Hier lassen sich gespeicherte Rezepte durchsuchen und filtern. Gespeicherte Favoriten bleiben auch bei einer geänderten Ernährungseinstellung sichtbar.
+3. **Für einen Tag einplanen** wählen. Im Rezept den Tag innerhalb der nächsten sieben Tage und die gewünschte Mahlzeit einstellen. Ein Mittagessen-Rezept kann beispielsweise auch zum Abendessen eingeplant werden.
+4. Die Auswahl übernehmen. Eine bereits belegte Mahlzeit wird im Dialog angezeigt und gezielt ersetzt. Andere Mahlzeiten und die Favoritenliste bleiben erhalten. Die Einkaufsliste berücksichtigt das gewählte Rezept und eure Portionszahl.
+
+Im Wochenplan führt **Aus Favoriten** direkt zur passenden Auswahl für die aktuelle Mahlzeit. Ein Rezept lässt sich bewusst für mehrere Tage verwenden, indem es erneut für einen weiteren Tag eingeplant wird. Entfernen aus den Favoriten löscht keine bereits geplante Mahlzeit. Favoriten werden je Konto auf dem Server gespeichert und nach Anmeldung auch auf anderen Geräten geladen.
+
+Der Bestand enthält 89 Frühstücke, 90 Mittagessen und 91 Abendessen. Die neuen Gerichte verwenden unterschiedliche Zutatenkombinationen und wiederverwendbare, vollständige Kochmethoden. Nährwerte der Erweiterung werden aus einer internen Tabelle mit ungefähren Werten und Portionsgewichten geschätzt. Sie sind keine laborgenauen Angaben. Die Bildbibliothek zeigt weiterhin 16 gekennzeichnete Serviervorschläge für Gerichtskategorien.
 
 ## Zwei Konten, später erweiterbar
 
