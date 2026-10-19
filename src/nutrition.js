@@ -1,10 +1,11 @@
+import {recipeKind} from './recipe-kind.js';
 import {matchesDiet} from './planner.js';
 import {recipes,mealTypes} from './data.js';
 import {suggestions} from './recipe-variety.js';
 export {recipes,mealTypes,suggestions};
-export function searchRecipes({search='',meal='all',vegetarian=false,quick=false,highProtein=false,favorites=null,catalog=recipes,diet=null}={}){
+export function searchRecipes({search='',meal='all',vegetarian=false,quick=false,highProtein=false,favorites=null,catalog=recipes,diet=null,kind='all'}={}){
  const query=search.toLocaleLowerCase('de').trim();
- return catalog.filter(r=>!r.archived&&(!diet||matchesDiet(r,diet))&&(meal==='all'||r.meal===meal)&&(!vegetarian||r.vegetarian)&&(!quick||r.time<=25)&&(!highProtein||r.protein>=25)&&(!favorites||favorites.includes(r.id))&&(!query||[r.name,...r.ingredients.map(i=>i[0])].join(' ').toLocaleLowerCase('de').includes(query)));
+ return catalog.filter(r=>!r.archived&&(kind==='all'||recipeKind(r)===kind)&&(!diet||matchesDiet(r,diet))&&(meal==='all'||r.meal===meal)&&(!vegetarian||r.vegetarian)&&(!quick||r.time<=25)&&(!highProtein||r.protein>=25)&&(!favorites||favorites.includes(r.id))&&(!query||[r.name,...r.ingredients.map(i=>i[0])].join(' ').toLocaleLowerCase('de').includes(query)));
 }
 export function fillWeek(plan,dates,diet,seed,refreshes={},catalog=recipes){
  const next={...plan};
@@ -15,7 +16,8 @@ export function plannedNutrition(plan,date,catalog=recipes){return mealTypes.red
 const rows=[{y:0,h:300},{y:300,h:295},{y:595,h:296},{y:891,h:363}];
 export function photoFrame(recipe){
  const name=recipe.name.toLowerCase();let index=4;
- if(/suppe|eintopf/.test(name))index=9;
+ if(recipe.kind==='casserole')index=11;
+ else if(recipe.kind==='soup'||/suppe|eintopf|gulasch|schmortopf/.test(name))index=9;
  else if(/wrap|pita|quesadilla/.test(name))index=10;
  else if(/curry|dal|chili/.test(name))index=8;
  else if(/risotto|polenta|stroganoff/.test(name))index=12;
@@ -27,6 +29,7 @@ export function photoFrame(recipe){
  else if(/salat/.test(name))index=4;
  else if(/ofen|blech|auflauf|gefüllte|lasagne|frittata|puffer/.test(name))index=11;
  else if(/caprese|burrata|tomaten.*mozzarella/.test(name))index=13;
+ else if(recipe.kind==='hearty')index=recipe.vegetarian?11:6;
  else if(recipe.meal==='breakfast'){
   if(/pancake|küchlein/.test(name))index=2;
   else if(/brot|toast|stulle|rührei|omelett|shakshuka/.test(name))index=1;

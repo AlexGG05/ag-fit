@@ -8,12 +8,12 @@ import {shoppingWithPantry} from './pantry.js';
 import {matchesDiet} from './planner.js';
 
 test('500-recipe expansion preserves the complete original catalogue and has distinct new ingredient sets',()=>{
- const legacy=recipes.filter(r=>!r.id.startsWith('kitchen-'));
+ const legacy=recipes.filter(r=>!r.id.startsWith('kitchen-')&&!r.id.startsWith('hearty-'));
  assert.equal(legacy.length,270);
  // Baseline: original 270 recipe objects from a2c8d44, including IDs and all quantities/instructions.
  assert.equal(createHash('sha256').update(JSON.stringify(legacy)).digest('hex'),'72a0eb104768cb00a7ed927407cc713b2041b4416f04e4845bbe2e61fc8662bc');
  assert.equal(kitchenRecipes.length,230);
- assert.deepEqual(['breakfast','lunch','dinner'].map(m=>recipes.filter(r=>r.meal===m).length),[166,166,168]);
+ assert.deepEqual(['breakfast','lunch','dinner'].map(m=>recipes.filter(r=>!r.id.startsWith('hearty-')&&r.meal===m).length),[166,166,168]);
  const sets=new Set(legacy.map(r=>r.ingredients.map(i=>i[0]).sort().join('|')));
  for(const r of kitchenRecipes){const signature=r.ingredients.map(i=>i[0]).sort().join('|');assert.ok(!sets.has(signature),r.id+' repeats an ingredient set');sets.add(signature)}
 });

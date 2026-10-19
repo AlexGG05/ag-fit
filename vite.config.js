@@ -10,4 +10,4 @@ self.addEventListener('fetch',event=>{const url=new URL(event.request.url);if(ev
 if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).catch(()=>caches.open(CACHE).then(cache=>cache.match('/'))));return}
 if(ASSETS.includes(url.pathname))event.respondWith(caches.open(CACHE).then(async cache=>(await cache.match(url.pathname))||fetch(event.request)));
 });`})}}}
-export default defineConfig({plugins:[react(),offlineShell()],server:{proxy:{'/api':'http://127.0.0.1:8080'}}});
+export default defineConfig({plugins:[react(),offlineShell()],build:{rollupOptions:{output:{manualChunks(id){if(/node_modules\/(react|react-dom|scheduler|lucide-react)\//.test(id))return 'ui-vendor'}}}},server:{proxy:{'/api':'http://127.0.0.1:8080'}}});

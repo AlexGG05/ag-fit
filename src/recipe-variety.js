@@ -1,6 +1,7 @@
 import {recipes} from './data.js';
 import {moreRecipes} from './more-recipes.js';
 import {seasonalRecipes} from './seasonal-recipes.js';
+import {heartyRecipes} from './hearty-recipes.js';
 import {kitchenRecipes} from './kitchen-recipes.js';
 import {expandedRecipes} from './expanded-recipes.js';
 const image={breakfast:'photo-1517673400267-0251440c45dc',lunch:'photo-1512621776951-a57141f2eefd',dinner:'photo-1473093295043-cdd812d0e601'};
@@ -24,5 +25,5 @@ const additions=[
 for(const [i,[meal,name,time,kcal,protein,ingredients,steps]]of additions.entries())recipes.push({id:`variety-${i}`,meal,name,time,kcal,protein,ingredients,steps,vegetarian:true,subtitle:'Frische Abwechslung für deinen Alltag',image:image[meal]});
 for(const [slug,meal,name,time,kcal,protein,vegetarian,ingredients,steps] of moreRecipes)recipes.push({id:`extra-${slug}`,meal,name,time,kcal,protein,vegetarian,ingredients,steps,subtitle:'Neue Ideen für deine abwechslungsreiche Woche',image:image[meal]});
 for(const [slug,meal,name,time,kcal,protein,vegetarian,ingredients,steps] of seasonalRecipes)recipes.push({id:`seasonal-${slug}`,meal,name,time,kcal,protein,vegetarian,ingredients,steps,subtitle:'Frisch gekocht. Einfach gut.',image:image[meal]});
-recipes.push(...expandedRecipes,...kitchenRecipes);
+recipes.push(...expandedRecipes,...kitchenRecipes,...heartyRecipes);
 export function suggestions(date,meal,diet,seed=1,refresh=0,catalog=recipes){const pool=catalog.filter(r=>!r.archived&&r.meal===meal&&(diet!=='Vegetarisch'||r.vegetarian));let x=2166136261;for(const c of `${seed}:${meal}`)x=Math.imul(x^c.charCodeAt(0),16777619)>>>0;for(let i=pool.length-1;i>0;i--){x=(Math.imul(x,1664525)+1013904223)>>>0;const j=x%(i+1);[pool[i],pool[j]]=[pool[j],pool[i]]}const day=Math.floor(Date.parse(date+'T12:00:00Z')/86400000);const gap=Math.max(1,Math.floor(pool.length/3));return Array.from({length:Math.min(3,pool.length)},(_,i)=>pool[((day+refresh+i*gap)%pool.length+pool.length)%pool.length]);}
