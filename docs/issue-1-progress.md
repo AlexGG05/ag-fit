@@ -54,10 +54,10 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [x] Fehlende Tage nicht als 0-kcal-Tage interpretieren; mobile Diagramme und barrierearme Tabellen anbieten.
 
 ### 9. Installierbare PWA
-- [ ] Web-App-Manifest, Icons und Service Worker ergänzen.
-- [ ] Installation auf Android/iOS ermöglichen; offline Rezeptdetails und letzten Wochenplan lesen.
-- [ ] Schreibaktionen offline entweder sicher synchronisieren (Konfliktlösung) oder sichtbar deaktivieren; keine stillen Datenverluste.
-- [ ] Aktualisierungshinweise und sichere Cache-Strategie; keine fremden persönlichen Kontodaten im Offline-Cache.
+- [x] Web-App-Manifest, Icons und Service Worker ergänzen.
+- [x] Installation auf Android/iOS ermöglichen; offline Rezeptdetails und letzten Wochenplan lesen.
+- [x] Schreibaktionen offline entweder sicher synchronisieren (Konfliktlösung) oder sichtbar deaktivieren; keine stillen Datenverluste.
+- [x] Aktualisierungshinweise und sichere Cache-Strategie; keine fremden persönlichen Kontodaten im Offline-Cache.
 
 ## Technische Anforderungen und Abnahme
 - SQLite-Datenmodell mit migrationssicheren Erweiterungen; bestehende Daten und Accounts erhalten.
@@ -81,3 +81,9 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - Abschnitte 2 und 6: `node --test src/planner.test.js src/pricing.test.js server/prices.test.js` erfolgreich. Geprüft: Ernährungs-/Allergen-/Ziel- und Kochzeitfilter, Vorratspriorisierung, leere Treffer, geschützte manuelle Pläne, Preisbezugsrechnung, unbekannte Preise, Budget ohne doppelte Vorratsanrechnung, Zugriffsschutz und Versionskonflikte.
 
 - Abschnitte 4 und 8: Barcode-/Produkt- und Statistiktests erfolgreich. Geprüft: EAN-Prüfziffer, feste OFF-Zieladresse ohne Weiterleitungen, API-Ausfall/fehlende Werte, Produktrechte, 100-ml-/Portionsrechnung, tatsächliche Werte, fehlende Tage und Kalendergrenzen. Der reale OFF-Abruf antwortet in dieser Cloud mit HTTP 403; die Integration ist mit kontrollierten Antworten und Ausfällen getestet, die manuelle Erfassung bleibt nutzbar. Reale Kameraerkennung benötigt eine Kamera und HTTPS; Berechtigungs-/Nichtverfügbarkeitsfälle werden abgefangen.
+
+- Abschnitt 9: Chromium-Prüfung für Desktop und 390-px-Mobilansicht erfolgreich: registrierter Service Worker, ausschließlich öffentliche Cache-Einträge, verschlüsselter Snapshot, Offline-Neuladen von Plan und Rezept, deaktivierte Schreibaktionen, Offline-Abmeldung und Wiederverbindung sowie Kontowechsel ohne fremde Favoriten. Android-/iOS-Installation erfolgt über die jeweiligen Browser; eine physische Geräteprüfung ist in dieser Cloud nicht möglich.
+- Migration: Eine Datenbank im ursprünglichen Schema wurde mit bestehendem Passwort, Sitzung, Favoriten, Wochenplan und zusätzlichen Alt-Daten aktualisiert. Alle sechs Migrationen, sämtliche neuen Ressourcen, Neustart und `PRAGMA integrity_check` wurden geprüft. Bestehende Benutzerzeilen bleiben unverändert.
+
+- Gesamtabnahme: 37 Node-Unit-/Integrationstests und Produktionsbuild erfolgreich. `npm run test:browser` prüft die vollständigen Konto-/Haushalt-/Rezept-/Tagebuch-/Vorrats-/Produkt-/Offline-Abläufe, mobile Darstellung und explizites PWA-Update; dieser Test läuft künftig in GitHub Actions. Docker-Image gebaut, Compose mit isoliertem Testvolume gestartet und nach Container-Neuerstellung auf unveränderte Testdaten und Sitzung geprüft. Produktionsvolumes wurden nicht verändert.
+- Für die blockierten Online-Abfragen sind `api.github.com` und `world.openfoodfacts.org` im Cloud-Umgebungsentwurf ergänzt. Der Entwurf muss in den Umgebungseinstellungen geprüft, gespeichert und veröffentlicht werden; das Speichern des Entwurfs allein aktiviert keine Freigabe. Bis dahin bleibt die Online-Issue-Synchronisierung offen.

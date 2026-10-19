@@ -1,39 +1,42 @@
 # ag fit
 
-Eine persönliche Ernährungs-App für zwei: Rezepte entdecken, eure Mahlzeiten planen und entspannt einkaufen – mit eigenen Konten und einer dauerhaften Datenbank.
+Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 270 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
 
-## Für eure Ernährung
+## Was die App kann
 
-- **270 vollständige Rezepte** für Frühstück, Mittagessen und Abendessen, mit Mengen, Kochanleitungen und ungefähren Kalorien- und Proteinwerten.
-- Eine Rezeptbibliothek mit Suche nach Gericht oder Zutat, Mahlzeitenfiltern, schnellen Gerichten bis 25 Minuten, proteinreichen Gerichten ab 25 g Protein und einer eigenen Favoritenansicht.
-- Lokal mitgelieferte, KI-generierte Food-Bilder. Die 16 fotoähnlichen Serviervorschläge sind Gerichtskategorien zugeordnet und in der Oberfläche als KI-Bilder gekennzeichnet; sie zeigen nicht jedes Rezept exakt. Keine externen Bildaufrufe zur Laufzeit.
-- Persönlicher Tagesüberblick über geplante Kalorien und Protein pro Person. Der Kalorien-Planwert ist frei wählbar und keine automatische Bedarfsempfehlung. Die Anzeige erfasst geplante Gerichte, keine verzehrten Mahlzeiten.
-- Ein sieben Tage umfassender Wochenplan mit drei wechselnden Vorschlägen je Mahlzeit. Ohne manuelles Austauschen wiederholt sich mindestens 24 Tage lang kein Vorschlag derselben Mahlzeit, auch vegetarisch. Die erste automatische Empfehlung durchläuft den gesamten passenden Bestand, statt nur einen Teil der Rezepte zu nutzen.
-- Freie Mahlzeiten automatisch füllen; bereits gewählte Gerichte und „Ich esse außerhalb“ bleiben erhalten. „Neue Vorschläge“ tauscht ausschließlich die angebotenen Ideen aus.
-- Rezepte für einen beliebigen Tag und jede Mahlzeit der kommenden Woche einplanen, Kochschritte abhaken und Zutaten für standardmäßig **zwei Portionen** anzeigen. Die Portionsgröße ist für das ganze Konto auf 1–6 einstellbar.
-- Eine automatisch summierte Einkaufsliste mit Abhaken, Textexport und Druckansicht.
-- Anmeldung und eigene Konten für euch beide. Profile, Favoriten, Wochenpläne und Einkaufslisten werden getrennt auf dem Server gespeichert und nach Anmeldung auf anderen Geräten geladen. Die beiden Konten teilen derzeit keinen Wochenplan und keine gemeinsame Liste.
+- **Gemeinsam planen:** Haushalt erstellen, einmaligen Einladungscode teilen und mit dem zweiten Konto beitreten. Wochenplan, Portionen (1–6), Einkaufsliste, Vorräte, Produkte und Preise werden gemeinsam genutzt. Änderungen erscheinen auf dem anderen Gerät nach spätestens etwa fünf Sekunden oder beim erneuten Fokussieren. Profile, Ziele, Favoriten und Ernährungstagebuch bleiben persönlich. Ohne Haushalt funktioniert alles für ein Einzelkonto.
+- **Rezepte entdecken:** 270 hinterlegte Gerichte, Suche nach Namen, Zutaten und Tags, Filter, Favoriten und vollständige Kochanleitungen. 16 lokal mitgelieferte KI-Bilder zeigen gekennzeichnete Serviervorschläge für Gerichtskategorien, keine exakten Fotos jedes Rezepts.
+- **Intelligenter Wochenplan:** sieben Tage, drei Vorschläge je Mahlzeit, automatisch freie Felder füllen, bewusst außerhalb essen. Ernährung, Zutaten-Ausschlüsse, Allergene, Vorlieben, Kochzeit sowie optional eigene Kalorien-/Proteinziele und Budget berücksichtigen. Vorräte und baldiges MHD werden bevorzugt, geplante Wiederholungen im Umfeld vermieden. Gründe stehen bei Vorschlägen; passen keine Gerichte, bleibt das Feld mit Erklärung offen. Manuelle Auswahlen werden erhalten.
+- **Eigene Rezepte:** Titel, Tags, Zutaten, Mengen, Einheiten, ursprüngliche Portionen, Dauer, Schritte und optional HTTPS-Bildadresse. Bekannte Zutaten liefern geschätzte Nährwerte; fehlende Gesamtnährwerte lassen sich ergänzen. Eigene Gerichte sind suchbar, favorisierbar und planbar. Freigabe im Haushalt ist optional, Bearbeitung nur durch die Eigentümerperson. Löschen archiviert das Gericht: bestehende Pläne und Tagebuchwerte bleiben erhalten. Ein Rezeptimport über beliebige URLs ist die ausdrücklich spätere optionale Teilfunktion; der Server ruft keine solchen URLs ab. Externe eigene Bilder lädt der Browser und sie sind offline gegebenenfalls nicht verfügbar.
+- **Vorratskammer:** Mengen, Lagerort und MHD erfassen, bearbeiten, löschen; bald ablaufende Lebensmittel sehen und passende Rezepte mit fehlenden Zutaten öffnen. Einkaufsmengen ziehen vorhandene Vorräte über die ganze Woche einmalig ab. kg/g und l/ml werden exakt umgerechnet, bekannte Stückgewichte geschätzt, unvereinbare Einheiten getrennt gehalten. Erst **Verbrauch bestätigen und Vorräte abbuchen** im Rezept bucht eine Entnahme; Planen oder Tagebuchführen verbraucht nichts automatisch.
+- **Tatsächlich gegessen:** geplante Mahlzeit ausdrücklich buchen, Portionen und Datum bearbeiten; Snacks, Getränke und einzelne Lebensmittel auch ohne Rezept erfassen. Kalorien, Protein, Kohlenhydrate und Fett werden getrennt vom Plan ausgewertet. Geplante Mahlzeiten lassen sich pro Termin nur einmal buchen; Bearbeitung, Löschen und vergangene Tage werden unterstützt. Historische Einträge enthalten einen eigenen Rezept-/Nährwertstand.
+- **Barcode und Produkte:** Kamera liest EAN/GTIN lokal mit ZXing; alternativ Code eintippen oder Produkt vollständig manuell erfassen. Erst die optionale Suche ruft Open Food Facts vom Server auf. Produktname, Bezugsbasis und Nährwerte prüfen und bestätigen. Werte je 100 g/ml werden für Mengen, definierte Portionen und Stückgrößen umgerechnet und können ins Tagebuch oder in den Vorrat übernommen werden. Fehlende Angaben bleiben unbekannt. OFF-Ausfälle blockieren keine manuelle Eingabe. Kamera benötigt HTTPS, ein passendes Gerät und Berechtigung.
+- **Budget:** freiwilliges Wochenbudget, selbst gepflegte Preise pro Bezugsmenge, geschätzte Kosten pro Portion/Rezept, für geplante Gerichte und den verbleibenden Wocheneinkauf. Vollständig bepreiste günstigere passende Alternativen lassen sich vergleichen. Fehlende Preise bedeuten eine unvollständige Summe, niemals automatisch 0 €. Es gibt keine Live-Supermarktpreise.
+- **Statistiken:** Tag, Kalenderwoche und Monat mit vier mobilen Diagrammen, zugänglicher Datentabelle, individuellen Vergleichszielen und Verlauf. Tatsächliche Werte stehen getrennt vom Plan. Tage ohne Eintrag zählen nicht als 0-kcal-Tage, unvollständige Nährwerte werden markiert.
+- **Installierbare App:** Manifest, Android-/iOS-Icons, Service Worker und Updatehinweis. Im angemeldeten Tab sind zuletzt bestätigter Plan, Favoriten, Einkaufsliste und Rezeptdetails offline lesbar; Schreibaktionen sind sichtbar deaktiviert.
 
-Training und Workouts sind aus der Oberfläche entfernt. Bereits gespeicherte Konten und Daten bleiben beim Update erhalten; bestehende Portions- und Profilwerte werden respektiert. Alte Trainingsdaten werden nicht gelöscht, sind aber nicht mehr zugänglich über die Oberfläche.
+Nährwerte und Stückgewichte sind Schätzungen, keine medizinischen Empfehlungen. Zielwerte setzt ihr selbst. Allergenfilter nutzen hinterlegte Zutaten und Hinweise und bestätigen **keine Allergenfreiheit**: Verpackungen, zusammengesetzte Zutaten und mögliche Spuren selbst prüfen. Ungeprüfte zusammengesetzte Produkte werden bei Allergen-Ausschlüssen nicht automatisch empfohlen. MHD ist kein automatisches Wegwerfdatum.
 
-Die Gerichte stammen aus einem hinterlegten Rezeptbestand. Es gibt keinen Live-Import fremder Rezepte oder KI-Rezeptgenerierung. Noch keine E-Mail-Verifizierung oder Passwort-Wiederherstellung. Browserdaten der ursprünglichen lokalen Version werden nicht automatisch übernommen.
+## Gemeinsam starten und Favoriten nutzen
 
-## Lieblingsgerichte gezielt einplanen
+1. Beide erstellen eigene Konten. Unter **Unser Haushalt** erstellt eine Person einen Haushalt und eine Einladung. Die andere gibt den Code dort ein. Nur die Verwaltung kann neue Einladungen erstellen; Codes sind einmalig und sieben Tage gültig.
+2. Der gemeinsame Plan startet mit dem bisherigen Plan der erstellenden Person. Persönliche Pläne bleiben gespeichert und erscheinen nach dem Verlassen wieder. Der gemeinsame Plan und gemeinsame Ressourcen bleiben für verbleibende Mitglieder erhalten; die Verwaltung wird beim Verlassen weitergegeben. Persönliche Vorräte/Preise/Produkte werden separat aufbewahrt, nicht still in den Haushalt verschoben.
+3. Bei Rezepten auf das Herz tippen. **Meine Favoriten → Für einen Tag einplanen** öffnet Tag und Mahlzeit. Ein Rezept kann auch mehrfach eingeplant werden; der Dialog nennt eine bestehende Auswahl, die ersetzt wird.
+4. **Ernährungstagebuch** erfasst ausdrücklich gegessene Mengen. **Vorratskammer** und **Lebensmittelbudget** pflegt ihr nach Bedarf; die Einkaufsliste berechnet fehlende Mengen automatisch.
 
-1. Bei einem Rezept auf das **Herz** tippen, um es als Favorit zu speichern. Das geht auf Rezeptkarten und im geöffneten Rezept.
-2. **Meine Favoriten** in der Navigation öffnen. Hier lassen sich gespeicherte Rezepte durchsuchen und filtern. Gespeicherte Favoriten bleiben auch bei einer geänderten Ernährungseinstellung sichtbar.
-3. **Für einen Tag einplanen** wählen. Im Rezept den Tag innerhalb der nächsten sieben Tage und die gewünschte Mahlzeit einstellen. Ein Mittagessen-Rezept kann beispielsweise auch zum Abendessen eingeplant werden.
-4. Die Auswahl übernehmen. Eine bereits belegte Mahlzeit wird im Dialog angezeigt und gezielt ersetzt. Andere Mahlzeiten und die Favoritenliste bleiben erhalten. Die Einkaufsliste berücksichtigt das gewählte Rezept und eure Portionszahl.
+## Konten und Daten
 
-Im Wochenplan führt **Aus Favoriten** direkt zur passenden Auswahl für die aktuelle Mahlzeit. Ein Rezept lässt sich bewusst für mehrere Tage verwenden, indem es erneut für einen weiteren Tag eingeplant wird. Entfernen aus den Favoriten löscht keine bereits geplante Mahlzeit. Favoriten werden je Konto auf dem Server gespeichert und nach Anmeldung auch auf anderen Geräten geladen.
+Standardmäßig erlaubt der Server **zwei Registrierungen**, danach bleibt nur die Anmeldung offen. Es gibt keine Standardpasswörter. Für weitere Familienmitglieder `MAX_USERS` auf beispielsweise `6` setzen; `0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt serverweit, nicht pro Haushalt. Bestehende Konten bleiben unabhängig vom Limit nutzbar. Noch keine E-Mail-Verifizierung, Passwort-Wiederherstellung oder Kontolöschung. Daten der ursprünglichen rein lokalen Browser-Version werden nicht automatisch importiert.
 
-Der Bestand enthält 89 Frühstücke, 90 Mittagessen und 91 Abendessen. Die neuen Gerichte verwenden unterschiedliche Zutatenkombinationen und wiederverwendbare, vollständige Kochmethoden. Nährwerte der Erweiterung werden aus einer internen Tabelle mit ungefähren Werten und Portionsgewichten geschätzt. Sie sind keine laborgenauen Angaben. Die Bildbibliothek zeigt weiterhin 16 gekennzeichnete Serviervorschläge für Gerichtskategorien.
+Die SQLite-Erweiterungen sind additiv und werden beim Start idempotent angewendet (`schema_migrations`, sechs Versionen). Vorhandene Benutzerzeilen, Passwort-Hashes, Sitzungen und beliebige bisherige JSON-Daten bleiben erhalten. Neue Haushalt-, Tagebuch-, Rezept-, Vorrats-, Preis- und Produkttabellen ergänzen sie. **Vor einem Produktionsupdate ein Backup erstellen** und das vorhandene Volume unverändert weiterverwenden. Eine alte App-Version kann die neuen Funktionen nicht anzeigen; ein Rücksprung auf das alte Image löscht deren Tabellen nicht.
 
-## Zwei Konten, später erweiterbar
+## Installation und Offline-Modus
 
-Standardmäßig erlaubt der Server **maximal zwei Registrierungen**. Danach ist die Registrierung geschlossen; beide Personen können sich weiter anmelden. Bestehende Konten bleiben unabhängig vom Limit nutzbar. Es gibt keinen voreingestellten Benutzernamen oder ein Standardpasswort: Erstellt beim ersten Aufruf eure eigenen Konten.
+Für Kamera, PWA und verschlüsselten Offline-Speicher **HTTPS** nutzen (localhost gilt für Entwicklung als sicher). Android: „App installieren“ oder Browsermenü; iPhone/iPad: Safari → Teilen → Zum Home-Bildschirm. Ein bloßer HTTP-Aufruf über eine Server-IP reicht hierfür nicht.
 
-Für weitere Familienmitglieder später `MAX_USERS` in Compose beispielsweise auf `6` setzen und den Container neu erstellen. `MAX_USERS=0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt für alle Konten auf dieser Serverinstanz, nicht pro Haushalt. Einladungen und Kontolöschung sind noch nicht implementiert.
+Der Service Worker speichert ausschließlich öffentliche App-Dateien und lokale Rezeptbilder, niemals API-Antworten, Cookies oder persönliche Daten. Ein eigener, mit AES-GCM verschlüsselter IndexedDB-Snapshot enthält den zuletzt bestätigten Plan und Rezeptbestand. Der Schlüssel liegt nur im Session-Speicher des angemeldeten Tabs. Ein neuer Tab ohne diesen Schlüssel zeigt offline keine Kontodaten; nach spätestens 30 Tagen ist eine Verbindung erforderlich. Privater Modus, gelöschter Browserspeicher oder Speicherbeschränkungen können Offline-Lesen verhindern. Das Tagebuch wird nicht offline vorgehalten.
+
+Offline-Schreibaktionen sind deaktiviert; beim Verbinden lädt die App zuerst den Serverstand. Nicht bestätigte Online-Änderungen werden nicht als erfolgreich gespeichert angezeigt: bei Netzwerkfehlern erneut speichern, bei Versionskonflikten lokale Änderungen als JSON sichern oder ausdrücklich verwerfen und den Serverstand laden. Es gibt keine automatische Konfliktüberschreibung. Beim Abmelden werden private Offline-Snapshots und Schlüssel gelöscht, andere offene Tabs informiert; eine Offline-Abmeldung merkt die Sitzungsabmeldung für die nächste Verbindung vor. Auf gemeinsam verwendeten Geräten stets abmelden. Neue Versionen erscheinen als **Neue App-Version laden**; vor dem Wechsel Änderungen fertig speichern.
 
 ## Docker Compose: lokal oder Server
 
@@ -130,7 +133,7 @@ Das Backup sicher aufbewahren: Es enthält Kontodaten, Passwort-Hashes und pers�
 
 ## Entwicklung
 
-Node.js **24** (mit integriertem `node:sqlite`) und npm. Keine externe Datenbank oder API-Schlüssel nötig.
+Node.js **24** (mit integriertem `node:sqlite`) und npm. Keine externe Datenbank oder API-Schlüssel nötig. Nur die optionale Produktsuche benötigt ausgehendes HTTPS zu `world.openfoodfacts.org`; bei fehlender Verbindung bleibt die manuelle Erfassung verfügbar.
 
 ```sh
 npm ci
@@ -146,12 +149,14 @@ npm run dev         # Vite auf Port 5173; /api wird auf Port 8080 weitergeleitet
 ```sh
 npm test
 npm run build
+npx playwright install --with-deps chromium # einmalig für Browserprüfungen
+npm run test:browser
 DATABASE_PATH=./.data/ag-fit.sqlite npm start
 ```
 
 Falls Port 8080 bereits belegt ist, den dort laufenden App-Container vorher stoppen oder den Vite-Proxy und `PORT` passend setzen. `npm run preview` liefert allein das Frontend aus und bietet keine Anmeldung; für Produktion `npm start` oder Docker verwenden.
 
-Konfiguration: `PORT` (Standard 8080), `DATABASE_PATH` (Standard `/data/ag-fit.sqlite`), `MAX_USERS` (Standard 2; 0 für unbegrenzt), `COOKIE_SECURE=true` für ausschließlich HTTPS. Sitzungen laufen nach 30 Tagen ab, Passwörter werden mit individuellen Salts und scrypt gehasht. Cookies sind HttpOnly und SameSite=Lax. Die API schützt gegen fremde Origins, begrenzt Anmeldeversuche und verhindert das stille Überschreiben zwischen Geräten: Bei einem Konflikt muss die Seite neu geladen werden.
+Konfiguration: `PORT` (Standard 8080), `DATABASE_PATH` (Standard `/data/ag-fit.sqlite`), `MAX_USERS` (Standard 2; 0 für unbegrenzt), `COOKIE_SECURE=true` für ausschließlich HTTPS. Sitzungen laufen nach 30 Tagen ab, Passwörter werden mit individuellen Salts und scrypt gehasht. Cookies sind HttpOnly und SameSite=Lax. Die API schützt gegen fremde Origins, begrenzt Anmeldeversuche und verhindert das stille Überschreiben zwischen Geräten: Bei einem Konflikt werden weitere Speicherungen angehalten. Lokale Änderungen können als JSON gesichert werden; anschließend den Serverstand ausdrücklich laden. Geteilte Ressourcen verwenden Versionsprüfungen.
 
 Für Builds hinter einem Unternehmensproxy unterstützt das Dockerfile das optionale BuildKit-Secret `build_ca` mit einem vertrauenswürdigen CA-Zertifikat. Es wird nur während der Installation eingebunden und nicht im Image gespeichert. Normale Docker-Hosts und GitHub Actions benötigen es nicht.
 

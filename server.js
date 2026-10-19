@@ -58,7 +58,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
  if(!['GET','HEAD'].includes(req.method))return send(res,405,{error:'Methode nicht erlaubt.'});
  let file=path.resolve(dist,'.'+decodeURIComponent(url.pathname));if(!file.startsWith(dist+path.sep)&&file!==dist)return send(res,404,{error:'Nicht gefunden.'});
  try{if(!(await stat(file)).isFile())file=path.join(dist,'index.html')}catch{if(path.extname(url.pathname))return send(res,404,{error:'Nicht gefunden.'});file=path.join(dist,'index.html')}
- const content=await readFile(file);const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':file.includes('/assets/')?'public,max-age=31536000,immutable':'no-cache'});res.end(req.method==='HEAD'?undefined:content);
+ const content=await readFile(file);const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':file.includes('/assets/')?'public,max-age=31536000,immutable':'no-cache'});res.end(req.method==='HEAD'?undefined:content);
  }catch(e){if(!res.headersSent)send(res,e.status||500,{error:e.status?e.message:'Serverfehler. Bitte versuche es erneut.'});else res.end()}});
  return {server,close:()=>db.close()};
 }

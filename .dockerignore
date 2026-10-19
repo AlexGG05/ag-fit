@@ -4,3 +4,11 @@ dist
 .github
 README.md
 *.test.js
+
+.data
+ag-fit-backup
+*.sqlite*
+*.db
+*.db-wal
+*.db-shm
+.env*
