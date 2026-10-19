@@ -7,8 +7,8 @@ Deutschsprachige Fitness-Webapp für die ganze Familie: persönliche Konten, Tra
 - Registrierung mit Vorname, E-Mail und Passwort sowie Anmeldung und Abmeldung. Jedes Familienmitglied hat ein eigenes Konto mit getrennten Daten.
 - Profile, Mahlzeiten, Einkaufslisten und Trainingsfortschritt werden in SQLite auf dem Server gespeichert und nach Anmeldung auf anderen Geräten geladen.
 - Trainingsvorschläge nach Ziel, Erfahrung und 2–5 Trainingstagen.
-- Planung von heute bis sechs Tage im Voraus mit drei zufällig angeordneten Vorschlägen je Mahlzeit. Die Auswahl variiert zwischen allen sieben Tagen und zwischen Personen. Ein Pool aus 26 vollständigen Rezepten liefert auch vegetarische Vorschläge.
-- „Neue Vorschläge“ tauscht die Ideen einer Mahlzeit aus. Bereits gewählte Gerichte bleiben erhalten und lassen sich unter „Geplant“ öffnen oder abwählen. Die Vorschlagsfolge bleibt beim Neuladen stabil.
+- Planung von heute bis sechs Tage im Voraus mit drei zufällig angeordneten Vorschlägen je Mahlzeit. Die Auswahl variiert zwischen allen sieben Tagen und zwischen Personen. Ein Pool aus 71 vollständigen Rezepten liefert auch vegetarische Vorschläge.
+- „Neue Vorschläge“ tauscht die Ideen einer Mahlzeit aus. Bereits gewählte Gerichte bleiben erhalten und lassen sich unter „Geplant“ öffnen oder abwählen. Die Vorschlagsfolge bleibt beim Neuladen stabil. Ohne manuelles Austauschen wiederholt sich innerhalb der nächsten sieben Tage kein Rezept in den Vorschlägen derselben Mahlzeit – auch bei vegetarischer Ernährung.
 - Pro Mahlzeit ein Rezept oder „Ich esse außerhalb / nichts planen“. Zutaten werden für 1–6 Personen zusammengefasst. Einkaufsliste abhaken und exportieren.
 - Zutatenmengen und Schritt-für-Schritt-Kochanleitungen für alle Rezepte.
 
