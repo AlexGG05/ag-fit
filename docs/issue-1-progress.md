@@ -21,11 +21,11 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [x] Verbrauch nur nach ausdrücklicher Bestätigung buchen.
 
 ### 4. Barcode-Scanner
-- [ ] Mobilen Kamerascanner sowie manuelle EAN-Eingabe anbieten.
-- [ ] Open Food Facts als optionale Produktdatenquelle integrieren; fehlende Produkte manuell erfassen.
-- [ ] Portionsgrößen, Einheiten und Nährwerte je 100 g/ml korrekt umrechnen.
-- [ ] Fehlerfälle, fehlende Nährwerte, Kameraberechtigung und API-Ausfall abfangen.
-- [ ] Keine ungeprüften Produktallergene als sicher deklarieren.
+- [x] Mobilen Kamerascanner sowie manuelle EAN-Eingabe anbieten.
+- [x] Open Food Facts als optionale Produktdatenquelle integrieren; fehlende Produkte manuell erfassen.
+- [x] Portionsgrößen, Einheiten und Nährwerte je 100 g/ml korrekt umrechnen.
+- [x] Fehlerfälle, fehlende Nährwerte, Kameraberechtigung und API-Ausfall abfangen.
+- [x] Keine ungeprüften Produktallergene als sicher deklarieren.
 
 ### 5. Ernährungstagebuch
 - [x] Geplante Mahlzeiten als tatsächlich gegessen markieren; Datum, Portionen und Mengen ändern.
@@ -48,10 +48,10 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - [x] Eigentümerschaft und Haushaltsfreigabe berücksichtigen.
 
 ### 8. Ernährungsstatistiken
-- [ ] Tages-, Wochen- und Monatsansichten für tatsächlich erfasste Kalorien und Makros.
-- [ ] Vergleich mit individuell gesetzten Zielen und zeitliche Entwicklung.
-- [ ] Geplante und tatsächlich gegessene Werte klar unterscheiden.
-- [ ] Fehlende Tage nicht als 0-kcal-Tage interpretieren; mobile Diagramme und barrierearme Tabellen anbieten.
+- [x] Tages-, Wochen- und Monatsansichten für tatsächlich erfasste Kalorien und Makros.
+- [x] Vergleich mit individuell gesetzten Zielen und zeitliche Entwicklung.
+- [x] Geplante und tatsächlich gegessene Werte klar unterscheiden.
+- [x] Fehlende Tage nicht als 0-kcal-Tage interpretieren; mobile Diagramme und barrierearme Tabellen anbieten.
 
 ### 9. Installierbare PWA
 - [ ] Web-App-Manifest, Icons und Service Worker ergänzen.
@@ -79,3 +79,5 @@ Implementiere die folgenden neun Erweiterungen in **AG Fit**. Arbeite schrittwei
 - Abschnitt 3: `node --test src/pantry.test.js server/pantry.test.js` erfolgreich. Geprüft: kg/g und l/ml, inkompatible Einheiten, MHD-Reihenfolge, Eigentümerschaft/Haushalt, Versionskonflikte und ausdrückliche, idempotente Entnahme.
 
 - Abschnitte 2 und 6: `node --test src/planner.test.js src/pricing.test.js server/prices.test.js` erfolgreich. Geprüft: Ernährungs-/Allergen-/Ziel- und Kochzeitfilter, Vorratspriorisierung, leere Treffer, geschützte manuelle Pläne, Preisbezugsrechnung, unbekannte Preise, Budget ohne doppelte Vorratsanrechnung, Zugriffsschutz und Versionskonflikte.
+
+- Abschnitte 4 und 8: Barcode-/Produkt- und Statistiktests erfolgreich. Geprüft: EAN-Prüfziffer, feste OFF-Zieladresse ohne Weiterleitungen, API-Ausfall/fehlende Werte, Produktrechte, 100-ml-/Portionsrechnung, tatsächliche Werte, fehlende Tage und Kalendergrenzen. Der reale OFF-Abruf antwortet in dieser Cloud mit HTTP 403; die Integration ist mit kontrollierten Antworten und Ausfällen getestet, die manuelle Erfassung bleibt nutzbar. Reale Kameraerkennung benötigt eine Kamera und HTTPS; Berechtigungs-/Nichtverfügbarkeitsfälle werden abgefangen.

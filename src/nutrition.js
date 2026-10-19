@@ -11,7 +11,7 @@ export function fillWeek(plan,dates,diet,seed,refreshes={},catalog=recipes){
  for(const date of dates)for(const meal of mealTypes){const key=`${date.key}:${meal.id}`;if(!next[key])next[key]=suggestions(date.key,meal.id,diet,seed,refreshes[key]||0,catalog)[0]?.id;}
  return next;
 }
-export function plannedNutrition(plan,date,catalog=recipes){return mealTypes.reduce((total,meal)=>{const recipe=catalog.find(r=>r.id===plan[`${date}:${meal.id}`]);if(recipe){total.kcal+=recipe.kcal??0;total.protein+=recipe.protein??0;total.count++}return total},{kcal:0,protein:0,count:0});}
+export function plannedNutrition(plan,date,catalog=recipes){return mealTypes.reduce((total,meal)=>{const recipe=catalog.find(r=>r.id===plan[`${date}:${meal.id}`]);if(recipe){if(!Number.isFinite(recipe.kcal))total.unknown=true;if(!Number.isFinite(recipe.protein))total.unknown=true;total.kcal+=recipe.kcal??0;total.protein+=recipe.protein??0;total.count++}return total},{kcal:0,protein:0,count:0});}
 const rows=[{y:0,h:300},{y:300,h:295},{y:595,h:296},{y:891,h:363}];
 export function photoFrame(recipe){
  const name=recipe.name.toLowerCase();let index=4;
