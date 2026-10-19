@@ -5,6 +5,14 @@ services:
       - "${AG_FIT_PORT:-8080}:8080"
     environment:
       MAX_USERS: "${MAX_USERS:-2}"
+      APP_URL: "${APP_URL:-}"
+      REQUIRE_EXISTING_DATABASE: "${REQUIRE_EXISTING_DATABASE:-false}"
+      EMAIL_VERIFICATION_REQUIRED: "${EMAIL_VERIFICATION_REQUIRED:-true}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_FROM: "${SMTP_FROM:-}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:-}"
     volumes:
       - ag-fit-data:/data
     restart: unless-stopped
@@ -12,3 +20,4 @@ services:
       - no-new-privileges:true
 volumes:
   ag-fit-data:
+    name: "${AG_FIT_DATA_VOLUME:-ag-fit_ag-fit-data}"

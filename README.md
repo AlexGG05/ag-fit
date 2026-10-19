@@ -2,6 +2,79 @@
 
 Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 270 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
 
+## Wichtig für das bestehende Arcane-Deployment
+
+Die bisher verwendete Compose-Datei ohne `volumes:` bindet **kein dauerhaft zugeordnetes Datenvolume** ein. Das Dockerfile erstellt dann ein anonymes `/data`-Volume; beim Neuerstellen kann ein neues leeres Volume entstehen. Ein verlorenes Cookie erfordert nur eine Anmeldung, keine erneute Registrierung. Konten werden mit Passwort-Hash in SQLite gespeichert.
+
+**Vor dem nächsten Deployment das bisherige Volume übernehmen**, statt eine leere Datenbank anzulegen:
+
+1. Auf dem Docker-Host den aktuellen Container finden:
+
+   ```sh
+   docker ps --filter ancestor=ghcr.io/alexgg05/ag-fit:latest --format '{{.ID}}  {{.Names}}'
+   docker inspect CONTAINER_ID --format '{{range .Mounts}}{{if eq .Destination "/data"}}{{.Name}}{{end}}{{end}}'
+   ```
+
+2. Den ausgegebenen Volumenamen notieren. Das kann eine lange zufällige Zeichenfolge sein. Den Container kurz stoppen und die vollständigen Daten sichern:
+
+   ```sh
+   docker stop CONTAINER_ID
+   docker cp CONTAINER_ID:/data ./ag-fit-backup
+   docker start CONTAINER_ID
+   ```
+
+3. In Arcane **`AG_FIT_DATA_VOLUME` genau auf diesen bisherigen Volumenamen setzen**. Das existierende anonyme Volume wird damit ausdrücklich wiederverwendet. Keine leeren Ersatzvolumes anlegen und keine alten Volumes bereinigen, bevor die Daten gesichert und geprüft sind. Für bereits ältere Deployments können weitere anonyme Volumes existieren; diese müssen gezielt geprüft werden, eine automatische Zusammenführung unterschiedlicher Datenbanken erfolgt nicht. Bereits gelöschte Volumes lassen sich nur aus Backups wiederherstellen.
+4. Das Passwort der IONOS-Mailbox ausschließlich als **`SMTP_PASSWORD`** in Arcane hinterlegen. Danach die folgende Compose-Datei verwenden. Sie ist identisch als [compose.arcane.yaml](compose.arcane.yaml) im Repository enthalten.
+
+```yaml
+services:
+  ag-fit:
+    image: ghcr.io/alexgg05/ag-fit:latest
+    ports:
+      - "8082:8080"
+    environment:
+      MAX_USERS: "2"
+      APP_URL: "https://fit.agrosskopf.de"
+      COOKIE_SECURE: "true"
+      DATABASE_PATH: "/data/ag-fit.sqlite"
+      REQUIRE_EXISTING_DATABASE: "${REQUIRE_EXISTING_DATABASE:-true}"
+      EMAIL_VERIFICATION_REQUIRED: "true"
+      SMTP_HOST: "smtp.ionos.de"
+      SMTP_PORT: "587"
+      SMTP_FROM: "ag fit <noreply@agrosskopf.de>"
+      SMTP_USER: "noreply@agrosskopf.de"
+      SMTP_PASSWORD: "${SMTP_PASSWORD:?IONOS-Mailbox-Passwort in Arcane hinterlegen}"
+    volumes:
+      - ag-fit-data:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+volumes:
+  ag-fit-data:
+    external: true
+    name: "${AG_FIT_DATA_VOLUME:?Vorhandenes Datenvolume in Arcane festlegen}"
+```
+
+`REQUIRE_EXISTING_DATABASE=true` beendet den Start, falls im gewählten Volume keine bestehende Datenbank liegt. So wird eine falsche Volume-Zuordnung nicht still durch eine neue leere Datenbank ersetzt. Der externe Volumename bleibt auch bei einem anderen Arcane-Projektnamen gleich; Compose verwaltet oder löscht dieses externe Volume nicht. Für eine **bewusste Neuinstallation** zunächst ein Volume erstellen (`docker volume create ag-fit-data`), dessen Namen einsetzen und nur beim ersten Start `REQUIRE_EXISTING_DATABASE=false` setzen. Danach wieder `true` verwenden.
+
+Öffentliche Adresse: **https://fit.agrosskopf.de**, Containerzugriff über Host-Port **8082**. Der Reverse Proxy muss HTTPS bereitstellen und `Host` sowie `X-Forwarded-Proto: https` weiterreichen. Aufgrund sicherer Cookies über diese HTTPS-Adresse anmelden, nicht über die unverschlüsselte Server-IP.
+
+## Aktivierung und Passwort vergessen
+
+Neue Registrierungen benötigen standardmäßig eine E-Mail-Bestätigung. Die App legt ein zunächst inaktives Konto an und versendet einen **24 Stunden** gültigen Aktivierungslink. Erst nach Öffnen und ausdrücklichem Bestätigen ist die Anmeldung möglich. „Aktivierungsmail erneut senden“ funktioniert auch bei geschlossener Registrierung. Bereits vor diesem Update bestehende Konten bleiben unverändert nutzbar; sie werden bei der Migration als Bestandskonten zugelassen und müssen sich nicht neu registrieren.
+
+**Passwort vergessen?** sendet einen **30 Minuten** gültigen Link. Nach dem Speichern des neuen Passworts werden sämtliche bestehenden Sitzungen und offenen Kontolinks ungültig. Favoriten, Haushaltszugehörigkeit, Pläne und sonstige Daten bleiben bestehen. Die Antwort verrät nicht, ob ein aktives Konto zur eingegebenen Adresse existiert. Links sind einmalig, zufällig und werden in der Datenbank ausschließlich gehasht gespeichert; sie stehen im URL-Fragment statt in Server-URL-Parametern. E-Mail-Vorschauprogramme verbrauchen sie nicht automatisch. Pro Konto und Linkart gilt mindestens eine Minute Abstand, zusätzlich gibt es ein Anfragelimit.
+
+Für **IONOS** ist die Konfiguration oben vorbereitet: `smtp.ionos.de:587` mit STARTTLS (TLS verpflichtend), Benutzer/Absender `noreply@agrosskopf.de`. Die Mailbox muss bei IONOS existieren und SMTP erlauben; ihr Mailbox-Passwort gehört in `SMTP_PASSWORD`. Alternativ unterstützt Port 465 direktes TLS. Zertifikate werden geprüft. `APP_URL` bestimmt die Linkadresse und wird niemals aus einem fremden Request-Host übernommen. Absender-/Domain-Einstellungen bei IONOS einschließlich SPF/DKIM müssen zum Versand passen.
+
+Ohne eingerichteten SMTP-Versand sind neue Registrierungen mit Bestätigung gesperrt und Passwort-Mails nicht verfügbar; **bestehende Konten können sich weiterhin anmelden**. Nach einem Versandfehler kann die Aktivierung erneut angefordert werden. Die Anzeige bestätigt keine Zustellung ins Postfach: Spamordner und SMTP-Konfiguration prüfen. Für eine ausdrücklich gewollte lokale Nutzung ohne Mails kann `EMAIL_VERIFICATION_REQUIRED=false` gesetzt werden; dann benötigen neue Konten keine Aktivierung und Passwort-Mails bleiben ohne SMTP nicht verfügbar.
+
 ## Was die App kann
 
 - **Gemeinsam planen:** Haushalt erstellen, einmaligen Einladungscode teilen und mit dem zweiten Konto beitreten. Wochenplan, Portionen (1–6), Einkaufsliste, Vorräte, Produkte und Preise werden gemeinsam genutzt. Änderungen erscheinen auf dem anderen Gerät nach spätestens etwa fünf Sekunden oder beim erneuten Fokussieren. Profile, Ziele, Favoriten und Ernährungstagebuch bleiben persönlich. Ohne Haushalt funktioniert alles für ein Einzelkonto.
@@ -26,9 +99,9 @@ Nährwerte und Stückgewichte sind Schätzungen, keine medizinischen Empfehlunge
 
 ## Konten und Daten
 
-Standardmäßig erlaubt der Server **zwei Registrierungen**, danach bleibt nur die Anmeldung offen. Es gibt keine Standardpasswörter. Für weitere Familienmitglieder `MAX_USERS` auf beispielsweise `6` setzen; `0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt serverweit, nicht pro Haushalt. Bestehende Konten bleiben unabhängig vom Limit nutzbar. Noch keine E-Mail-Verifizierung, Passwort-Wiederherstellung oder Kontolöschung. Daten der ursprünglichen rein lokalen Browser-Version werden nicht automatisch importiert.
+Standardmäßig erlaubt der Server **zwei Registrierungen**, danach bleibt nur die Anmeldung offen. Es gibt keine Standardpasswörter. Für weitere Familienmitglieder `MAX_USERS` auf beispielsweise `6` setzen; `0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt serverweit, nicht pro Haushalt. Bestehende Konten bleiben unabhängig vom Limit nutzbar. E-Mail-Verifizierung und Passwort-Wiederherstellung sind vorhanden; eine Kontolöschung ist noch nicht implementiert. Daten der ursprünglichen rein lokalen Browser-Version werden nicht automatisch importiert.
 
-Die SQLite-Erweiterungen sind additiv und werden beim Start idempotent angewendet (`schema_migrations`, sechs Versionen). Vorhandene Benutzerzeilen, Passwort-Hashes, Sitzungen und beliebige bisherige JSON-Daten bleiben erhalten. Neue Haushalt-, Tagebuch-, Rezept-, Vorrats-, Preis- und Produkttabellen ergänzen sie. **Vor einem Produktionsupdate ein Backup erstellen** und das vorhandene Volume unverändert weiterverwenden. Eine alte App-Version kann die neuen Funktionen nicht anzeigen; ein Rücksprung auf das alte Image löscht deren Tabellen nicht.
+Die SQLite-Erweiterungen sind additiv und werden beim Start idempotent angewendet (`schema_migrations`, sieben Versionen). Vorhandene Benutzerzeilen, Passwort-Hashes, Sitzungen und beliebige bisherige JSON-Daten bleiben erhalten. Neue Haushalt-, Tagebuch-, Rezept-, Vorrats-, Preis- und Produkttabellen ergänzen sie. **Vor einem Produktionsupdate ein Backup erstellen** und das vorhandene Volume unverändert weiterverwenden. Eine alte App-Version kann die neuen Funktionen nicht anzeigen; ein Rücksprung auf das alte Image löscht deren Tabellen nicht.
 
 ## Installation und Offline-Modus
 
@@ -48,7 +121,7 @@ cd ag-fit
 docker compose up -d --build
 ```
 
-Auf Port **8080** die App öffnen und eure beiden Konten erstellen. Alternativer Host-Port: `AG_FIT_PORT=8090 docker compose up -d --build`.
+Auf Port **8080** die App öffnen. Vor neuen Registrierungen SMTP/APP_URL einrichten oder für rein lokale Nutzung ausdrücklich `EMAIL_VERIFICATION_REQUIRED=false` setzen. Alternativer Host-Port: `AG_FIT_PORT=8090 docker compose up -d --build`.
 
 ```sh
 docker compose ps
@@ -66,7 +139,7 @@ Bei Änderungen auf `main` führt der GitHub-Workflow **Test and publish contain
 
 Für anonymes Pulling das GitHub-Package unter **Packages → ag-fit → Package settings → Change visibility → Public** öffentlich stellen. Alternativ in Arcane Registry-Zugangsdaten für `ghcr.io` mit Leserechten hinterlegen. Der Workflow verwendet das automatisch bereitgestellte `GITHUB_TOKEN`.
 
-In Arcane ein Compose-Projekt mit folgender vollständiger Datei erstellen:
+Für eure bestehende Installation die oben aufgeführte IONOS-/Arcane-Datei mit dem bisherigen externen Volume verwenden. Das folgende allgemeine Minimalbeispiel ist für lokale Nutzung ohne E-Mail-Bestätigung; der feste Volumename muss bei bestehenden Daten ebenfalls auf das bisherige Volume zeigen:
 
 ```yaml
 services:
@@ -76,6 +149,7 @@ services:
       - "8080:8080"
     environment:
       MAX_USERS: "2"
+      EMAIL_VERIFICATION_REQUIRED: "false"
     volumes:
       - ag-fit-data:/data
     restart: unless-stopped
@@ -89,6 +163,7 @@ services:
       retries: 3
 volumes:
   ag-fit-data:
+    name: ag-fit_ag-fit-data
 ```
 
 Anschließend unter `http://DEINE-SERVER-IP:8080` öffnen. Für öffentlichen Zugriff einen Reverse Proxy mit **HTTPS** davor setzen, der den ursprünglichen `Host` und `X-Forwarded-Proto: https` weiterreicht. Dann setzt die App sichere Sitzungscookies. Optional `environment: { COOKIE_SECURE: "true" }` ergänzen, um ausschließlich HTTPS-Cookies zu erzwingen (Anmeldung über reines HTTP funktioniert damit nicht). Nur hinter einem lokalen Proxy kann die Portbindung `127.0.0.1:8080:8080` verwendet werden.
@@ -108,6 +183,7 @@ services:
       - "8080:8080"
     environment:
       MAX_USERS: "2"
+      EMAIL_VERIFICATION_REQUIRED: "false"
     volumes:
       - ag-fit-data:/data
     restart: unless-stopped
@@ -115,6 +191,7 @@ services:
       - no-new-privileges:true
 volumes:
   ag-fit-data:
+    name: ag-fit_ag-fit-data
 ```
 
 Der Docker-Host benötigt Zugriff auf GitHub, Docker Hub und die npm-Registry. Für private Repositories die Image-Variante mit Registry-Anmeldung verwenden. Zugangsdaten niemals in Compose-URLs schreiben. Nach Änderungen neu bauen; für einen festen Stand `#main` durch `#COMMIT-SHA` ersetzen.
@@ -137,7 +214,7 @@ Node.js **24** (mit integriertem `node:sqlite`) und npm. Keine externe Datenbank
 
 ```sh
 npm ci
-npm run dev:server  # API auf Port 8080; Datenbank in .data/
+EMAIL_VERIFICATION_REQUIRED=false npm run dev:server  # API auf Port 8080; Datenbank in .data/
 ```
 
 In einem zweiten Terminal:

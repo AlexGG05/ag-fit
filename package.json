@@ -10,11 +10,12 @@
     "test": "node --test",
     "start": "node server.js",
     "dev:server": "DATABASE_PATH=./.data/ag-fit.sqlite node server.js",
-    "test:browser": "node scripts/browser-check.cjs"
+    "test:browser": "node scripts/browser-check.cjs && node scripts/browser-email-check.cjs"
   },
   "dependencies": {
     "@zxing/browser": "^0.1.5",
     "lucide-react": "^0.468.0",
+    "nodemailer": "^10.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

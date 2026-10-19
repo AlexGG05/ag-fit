@@ -3,3 +3,7 @@ dist/
 .playwright/
 
 .data/
+.env
+.env.*
+!.env.example
+ag-fit-backup/

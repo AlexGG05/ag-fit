@@ -7,12 +7,13 @@ RUN --mount=type=secret,id=build_ca \
 COPY index.html vite.config.js ./
 COPY src ./src
 COPY public ./public
-RUN npm run build
+RUN npm run build && npm prune --omit=dev --ignore-scripts --no-audit --no-fund
 
 FROM node:24-alpine
 ENV NODE_ENV=production PORT=8080 DATABASE_PATH=/data/ag-fit.sqlite
 WORKDIR /app
 COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --chown=node:node --chmod=644 server.js ./server.js
 COPY --chown=node:node server ./server
 COPY --from=build --chown=node:node /app/src ./src
