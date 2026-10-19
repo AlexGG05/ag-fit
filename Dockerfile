@@ -14,6 +14,7 @@ ENV NODE_ENV=production PORT=8080 DATABASE_PATH=/data/ag-fit.sqlite
 WORKDIR /app
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --chown=node:node --chmod=644 server.js ./server.js
+COPY --chown=node:node server ./server
 COPY --chown=node:node --chmod=644 package.json ./package.json
 RUN mkdir /data && chown node:node /data
 USER node

@@ -1,4 +1,5 @@
 import http from 'node:http';
+import {migrate,workspace,saveState,householdRoute} from './server/workspace.js';
 import {DatabaseSync} from 'node:sqlite';
 import {randomBytes,scrypt as scryptCallback,timingSafeEqual,createHash} from 'node:crypto';
 import {promisify} from 'node:util';
@@ -9,6 +10,7 @@ const scrypt=promisify(scryptCallback);
 const hash=t=>createHash('sha256').update(t).digest('hex');
 export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false,maxUsers=2}={}){
  const db=new DatabaseSync(database);db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,data TEXT NOT NULL DEFAULT \'{}\',revision INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);');
+ migrate(db);
  const limits=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))};
  const cookie=(req,res,token,age)=>res.setHeader('Set-Cookie',`ag_session=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${age}${secureCookies||req.headers['x-forwarded-proto']==='https'?'; Secure':''}`);
@@ -33,12 +35,13 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
    }else{
     user=db.prepare('SELECT * FROM users WHERE email=?').get(email);const [salt,stored]=(user?.password||'00000000000000000000000000000000:'+ '00'.repeat(64)).split(':');const actual=await scrypt(password,salt,64);if(!user||!timingSafeEqual(actual,Buffer.from(stored,'hex')))return send(res,401,{error:'E-Mail oder Passwort stimmen nicht.'});
    }
-   db.prepare('DELETE FROM sessions WHERE expires<?').run(now);const token=randomBytes(32).toString('hex');db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(hash(token),user.id,now+30*86400000);cookie(req,res,token,30*86400);return send(res,200,{user:publicUser(user),data:JSON.parse(user.data),revision:user.revision});
+   db.prepare('DELETE FROM sessions WHERE expires<?').run(now);const token=randomBytes(32).toString('hex');db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(hash(token),user.id,now+30*86400000);cookie(req,res,token,30*86400);return send(res,200,workspace(db,user));
   }
   const user=session(req);if(!user)return send(res,401,{error:'Bitte melde dich an.'});
-  if(url.pathname==='/api/me'&&req.method==='GET')return send(res,200,{user:publicUser(user),data:JSON.parse(user.data),revision:user.revision});
+  if(url.pathname==='/api/me'&&req.method==='GET')return send(res,200,workspace(db,user));
   if(url.pathname==='/api/logout'&&req.method==='POST'){const t=req.headers.cookie?.match(/ag_session=([a-f0-9]{64})/)?.[1];if(t)db.prepare('DELETE FROM sessions WHERE token=?').run(hash(t));cookie(req,res,'',0);return send(res,200,{ok:true})}
-  if(url.pathname==='/api/state'&&req.method==='PUT'){const b=await body(req);if(!b.data||typeof b.data!=='object'||Array.isArray(b.data)||!Number.isSafeInteger(b.revision))return send(res,400,{error:'Ungültiger Speicherstand.'});const result=db.prepare('UPDATE users SET data=?,revision=revision+1 WHERE id=? AND revision=?').run(JSON.stringify(b.data),user.id,b.revision);if(!result.changes)return send(res,409,{error:'Deine Daten wurden auf einem anderen Gerät geändert. Lade die Seite neu, bevor du weiterplanst.'});return send(res,200,{revision:b.revision+1})}
+  if(url.pathname==='/api/state'&&req.method==='PUT')return send(res,200,saveState(db,user,await body(req)));
+  const householdResult=await householdRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(householdResult!==null)return send(res,200,householdResult);
   return send(res,404,{error:'Nicht gefunden.'});
  }
  if(!['GET','HEAD'].includes(req.method))return send(res,405,{error:'Methode nicht erlaubt.'});
