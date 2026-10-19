@@ -16,17 +16,19 @@ const rows=[{y:0,h:300},{y:300,h:295},{y:595,h:296},{y:891,h:363}];
 export function photoFrame(recipe){
  const name=recipe.name.toLowerCase();let index=4;
  if(/suppe|eintopf/.test(name))index=9;
- else if(/wrap|pita/.test(name))index=10;
+ else if(/wrap|pita|quesadilla/.test(name))index=10;
  else if(/curry|dal|chili/.test(name))index=8;
  else if(/risotto|polenta|stroganoff/.test(name))index=12;
  else if(/nudel|pasta|spaghetti|lasagne|orzo|gnocchi/.test(name))index=/tofu|reisnudel|soba|sesam|erdnuss/.test(name)?14:5;
  else if(/lachs|kabeljau/.test(name))index=7;
  else if(/hähnchen|chicken|puten/.test(name))index=/salat/.test(name)?4:6;
  else if(/ofenkartoffel|ofensüßkartoffel|ofenkartoffel|kräuterquark/.test(name))index=15;
- else if(/ofen|blech|auflauf|gefüllte|lasagne|frittata/.test(name))index=11;
+ else if(/ofenhafer/.test(name))index=0;
+ else if(/salat/.test(name))index=4;
+ else if(/ofen|blech|auflauf|gefüllte|lasagne|frittata|puffer/.test(name))index=11;
  else if(/caprese|burrata|tomaten.*mozzarella/.test(name))index=13;
  else if(recipe.meal==='breakfast'){
-  if(/pancake/.test(name))index=2;
+  if(/pancake|küchlein/.test(name))index=2;
   else if(/brot|toast|stulle|rührei|omelett|shakshuka/.test(name))index=1;
   else if(/quark|skyr|joghurt|kefir|ricotta|hüttenkäse/.test(name))index=3;
   else index=0;

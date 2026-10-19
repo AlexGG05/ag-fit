@@ -1,6 +1,6 @@
 # ag fit
 
-Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 270 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
+Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 500 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
 
 ## Neuinstallation nach gelöschtem Datenvolume
 
@@ -89,7 +89,7 @@ Ohne eingerichteten SMTP-Versand sind neue Registrierungen mit Bestätigung gesp
 ## Was die App kann
 
 - **Gemeinsam planen:** Haushalt erstellen, einmaligen Einladungscode teilen und mit dem zweiten Konto beitreten. Wochenplan, Portionen (1–6), Einkaufsliste, Vorräte, Produkte und Preise werden gemeinsam genutzt. Änderungen erscheinen auf dem anderen Gerät nach spätestens etwa fünf Sekunden oder beim erneuten Fokussieren. Profile, Ziele, Favoriten und Ernährungstagebuch bleiben persönlich. Ohne Haushalt funktioniert alles für ein Einzelkonto.
-- **Rezepte entdecken:** 270 hinterlegte Gerichte, Suche nach Namen, Zutaten und Tags, Filter, Favoriten und vollständige Kochanleitungen. 16 lokal mitgelieferte KI-Bilder zeigen gekennzeichnete Serviervorschläge für Gerichtskategorien, keine exakten Fotos jedes Rezepts.
+- **Rezepte entdecken:** 500 hinterlegte Gerichte, Suche nach Namen, Zutaten und Tags, Filter, Favoriten und vollständige Kochanleitungen. 16 lokal mitgelieferte KI-Bilder zeigen gekennzeichnete Serviervorschläge für Gerichtskategorien, keine exakten Fotos jedes Rezepts.
 - **Intelligenter Wochenplan:** sieben Tage, drei Vorschläge je Mahlzeit, automatisch freie Felder füllen, bewusst außerhalb essen. Ernährung, Zutaten-Ausschlüsse, Allergene, Vorlieben, Kochzeit sowie optional eigene Kalorien-/Proteinziele und Budget berücksichtigen. Vorräte und baldiges MHD werden bevorzugt, geplante Wiederholungen im Umfeld vermieden. Gründe stehen bei Vorschlägen; passen keine Gerichte, bleibt das Feld mit Erklärung offen. Manuelle Auswahlen werden erhalten.
 - **Eigene Rezepte:** Titel, Tags, Zutaten, Mengen, Einheiten, ursprüngliche Portionen, Dauer, Schritte und optional HTTPS-Bildadresse. Bekannte Zutaten liefern geschätzte Nährwerte; fehlende Gesamtnährwerte lassen sich ergänzen. Eigene Gerichte sind suchbar, favorisierbar und planbar. Freigabe im Haushalt ist optional, Bearbeitung nur durch die Eigentümerperson. Löschen archiviert das Gericht: bestehende Pläne und Tagebuchwerte bleiben erhalten. Ein Rezeptimport über beliebige URLs ist die ausdrücklich spätere optionale Teilfunktion; der Server ruft keine solchen URLs ab. Externe eigene Bilder lädt der Browser und sie sind offline gegebenenfalls nicht verfügbar.
 - **Vorratskammer:** Mengen, Lagerort und MHD erfassen, bearbeiten, löschen; bald ablaufende Lebensmittel sehen und passende Rezepte mit fehlenden Zutaten öffnen. Einkaufsmengen ziehen vorhandene Vorräte über die ganze Woche einmalig ab. kg/g und l/ml werden exakt umgerechnet, bekannte Stückgewichte geschätzt, unvereinbare Einheiten getrennt gehalten. Erst **Verbrauch bestätigen und Vorräte abbuchen** im Rezept bucht eine Entnahme; Planen oder Tagebuchführen verbraucht nichts automatisch.
@@ -100,6 +100,8 @@ Ohne eingerichteten SMTP-Versand sind neue Registrierungen mit Bestätigung gesp
 - **Installierbare App:** Manifest, Android-/iOS-Icons, Service Worker und Updatehinweis. Im angemeldeten Tab sind zuletzt bestätigter Plan, Favoriten, Einkaufsliste und Rezeptdetails offline lesbar; Schreibaktionen sind sichtbar deaktiviert.
 
 Nährwerte und Stückgewichte sind Schätzungen, keine medizinischen Empfehlungen. Zielwerte setzt ihr selbst. Allergenfilter nutzen hinterlegte Zutaten und Hinweise und bestätigen **keine Allergenfreiheit**: Verpackungen, zusammengesetzte Zutaten und mögliche Spuren selbst prüfen. Ungeprüfte zusammengesetzte Produkte werden bei Allergen-Ausschlüssen nicht automatisch empfohlen. MHD ist kein automatisches Wegwerfdatum.
+
+Der feste Bestand umfasst **166 Frühstücke, 166 Mittagessen und 168 Abendessen**. Die Erweiterung auf 500 ergänzt 230 kuratierte Gerichte mit eigenen Zutatenkombinationen, Portionsmengen, Kochzeiten und vollständigen Anleitungen, darunter vegane und vegetarische Gerichte sowie Fisch und Geflügel. Alle bisherigen Rezept-IDs und Rezepte bleiben unverändert. Nährwerte der Ergänzung werden aus der vorhandenen Zutatentabelle geschätzt. Die Bilder bleiben gekennzeichnete Serviervorschläge für Gerichtskategorien.
 
 ## Gemeinsam starten und Favoriten nutzen
 
