@@ -5,13 +5,13 @@ Eine responsive, deutschsprachige Fitness-Webapp mit persönlichem Trainingsplan
 ## Funktionen
 
 - Trainingsvorschläge nach Ziel, Erfahrung und 2–5 Trainingstagen; Einheiten als absolviert markieren.
-- Planung von heute bis sechs Tage im Voraus: drei Vorschläge für Frühstück, Mittagessen und Abendessen. Eine vegetarische Auswahl bietet zum Mittag- und Abendessen zwei passende Vorschläge.
+- Planung von heute bis sechs Tage im Voraus: drei Vorschläge für Frühstück, Mittagessen und Abendessen. Auch die vegetarische Auswahl bietet drei passende Vorschläge pro Mahlzeit.
 - Pro Mahlzeit genau ein Gericht oder „Ich esse außerhalb / nichts planen“. Ausgewählte Rezepte lassen sich wieder abwählen.
 - Zutaten aller gewählten Gerichte der kommenden sieben Tage werden addiert und auf 1–6 Personen skaliert. Einkaufsliste abhaken und als Text exportieren.
 - Rezeptdetails mit Zutatenmengen und Schritt-für-Schritt-Anleitung.
 - Profil, Mahlzeiten, Einkaufsstatus und Trainingsfortschritt werden lokal im Browser gespeichert.
 
-**Datenmodell:** Diese erste Version arbeitet ohne Serverkonto, Datenbank oder KI-Dienst. Die Pläne entstehen aus festen Regeln und neun hinterlegten Rezepten. Browser und Geräte teilen keine Daten; beim Löschen des Browser-Speichers gehen die Einträge verloren. Auf gemeinsam genutzten Geräten sind die Einträge für andere Nutzer desselben Browserprofils sichtbar. Eine neue Domain hat einen eigenen Speicher.
+**Datenmodell:** Diese erste Version arbeitet ohne Serverkonto, Datenbank oder KI-Dienst. Die Pläne entstehen aus festen Regeln und elf hinterlegten Rezepten. Browser und Geräte teilen keine Daten; beim Löschen des Browser-Speichers gehen die Einträge verloren. Auf gemeinsam genutzten Geräten sind die Einträge für andere Nutzer desselben Browserprofils sichtbar. Eine neue Domain hat einen eigenen Speicher.
 
 ## Docker Compose: lokal oder auf einem Server
 
@@ -101,3 +101,5 @@ npm run build
 Trainingsvorschläge sind allgemeine Empfehlungen für gesunde Erwachsene und keine medizinische Beratung. Kalorien und Protein sind Schätzwerte. Allergien und individuelle Einschränkungen vor der Rezeptauswahl prüfen. Ein Ziel wie Gewichtsreduktion ersetzt keine individuelle Bedarfsermittlung.
 
 Rezeptbilder sind lokal mitgelieferte, schematische Illustrationen. Schriften werden optional von Google Fonts geladen; ohne Zugriff nutzt die App eine Systemschrift. Die App benötigt zur Laufzeit keinen externen API-Dienst.
+
+Für Builds hinter einem eigenen Unternehmensproxy unterstützt das Dockerfile optional ein BuildKit-Secret `build_ca` mit dem vertrauenswürdigen CA-Zertifikat. Es wird nur während der Installation eingebunden und nicht ins Image übernommen. Für normale Docker-Hosts und GitHub Actions ist es nicht erforderlich.
