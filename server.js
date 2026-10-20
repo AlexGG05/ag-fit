@@ -1,3 +1,4 @@
+import {migrateShoppingExtras,shoppingExtrasRoute} from './server/shopping-extras.js';
 import {migrateCatalogue,catalogueRoute} from './server/catalogue.js';
 import http from 'node:http';
 import {migrateShopping,shoppingRoute} from './server/shopping.js';
@@ -19,7 +20,7 @@ const scrypt=promisify(scryptCallback);
 const hash=t=>createHash('sha256').update(t).digest('hex');
 export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false,maxUsers=2,productFetch=fetch,mailer=null,publicUrl=null,requireVerification=true,clock=Date.now}={}){
  const db=new DatabaseSync(database);db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,data TEXT NOT NULL DEFAULT \'{}\',revision INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);');
- migrate(db);migrateDiary(db);migrateRecipes(db);migratePantry(db);migratePrices(db);migrateProducts(db);migrateEmailAuth(db);migrateShopping(db);const catalogue=migrateCatalogue(db);
+ migrate(db);migrateDiary(db);migrateRecipes(db);migratePantry(db);migratePrices(db);migrateProducts(db);migrateEmailAuth(db);migrateShopping(db);const catalogue=migrateCatalogue(db);migrateShoppingExtras(db);
  const mailAuth=emailAuth({db,mailer,publicUrl,required:requireVerification,clock});
  const limits=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))};
@@ -59,6 +60,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
   if(url.pathname==='/api/logout'&&req.method==='POST'){const t=req.headers.cookie?.match(/ag_session=([a-f0-9]{64})/)?.[1];if(t)db.prepare('DELETE FROM sessions WHERE token=?').run(hash(t));cookie(req,res,'',0);return send(res,200,{ok:true})}
   if(url.pathname==='/api/state'&&req.method==='PUT')return send(res,200,saveState(db,user,await body(req)));
   const catalogueResult=catalogueRoute({db,path:url.pathname,method:req.method,params:url.searchParams});if(catalogueResult!==null)return send(res,200,catalogueResult);
+  const extrasResult=await shoppingExtrasRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(extrasResult!==null)return send(res,200,extrasResult);
   const shoppingResult=await shoppingRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(shoppingResult!==null)return send(res,200,shoppingResult);
   const productResult=await productRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req),fetcher:productFetch});if(productResult!==null)return send(res,200,productResult);
   const priceResult=await priceRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(priceResult!==null)return send(res,200,priceResult);
