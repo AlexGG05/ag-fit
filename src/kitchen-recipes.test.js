@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {recipes} from './nutrition.js';
+import './recipe-variety.js';
+import {recipes} from './data.js';
 import {kitchenRecipes} from './kitchen-recipes.js';
 import {ingredientNutrition} from './food.js';
 import {shoppingWithPantry} from './pantry.js';

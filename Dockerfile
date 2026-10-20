@@ -16,6 +16,7 @@ COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --chown=node:node --chmod=644 server.js ./server.js
 COPY --chown=node:node server ./server
+COPY --chown=node:node scripts/recipes.mjs ./scripts/recipes.mjs
 COPY --from=build --chown=node:node /app/src ./src
 COPY --chown=node:node --chmod=644 package.json ./package.json
 RUN mkdir /data && chown node:node /data

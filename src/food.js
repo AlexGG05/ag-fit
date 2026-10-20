@@ -1,3 +1,4 @@
+import {referenceFoods} from './catalogue/references.js';
 import {kcalProtein,unitWeight} from './expanded-recipes.js';
 export const macroKeys=['kcal','protein','carbs','fat'];
 export const canonicalName=name=>String(name).trim().toLocaleLowerCase('de').replace(/\s+/g,' ');
@@ -13,6 +14,7 @@ group('Kartoffeln|Süßkartoffel|Hokkaidokürbis|Sellerieknolle',16,.2);group('K
 const extras={'Rinderhackfleisch, 5 % Fett':[140,21],'Rindergulasch, mager':[125,22],'Schweinefilet':[110,22],'Putenhackfleisch, mager':[150,21],'Burrata':[280,13],'Kefir':[60,3.5],'Milchreis':[350,7],'Polenta':[350,8],'Vollkorngrieß':[340,12],'Lasagneblätter':[350,12],'Falafel, küchenfertig':[280,10],'Oliven, entsteint':[145,1],'Kresse':[30,3],'Espresso, zubereitet':[1,.1]};
 const liquids=new Set(['Milch','Haferdrink','Kefir','Olivenöl','Rapsöl','Kokosmilch','Sojasauce','Espresso, zubereitet']);
 export const ingredientFacts=Object.fromEntries(Object.entries({...kcalProtein,...extras}).map(([name,[kcal,protein]])=>[canonicalName(name),{name,kcal,protein,carbs:carbFat[name]?.[0]??null,fat:carbFat[name]?.[1]??null,basis:liquids.has(name)?'ml':'g',unitWeight:unitWeight[name]??null,estimated:true}]));
+for(const fact of referenceFoods)if(!ingredientFacts[canonicalName(fact.name)])ingredientFacts[canonicalName(fact.name)]={...fact};
 export function findFact(name,products=[]){return products.find(p=>canonicalName(p.name)===canonicalName(name))||ingredientFacts[canonicalName(name)]||null}
 export function quantityInBasis(amount,unit,fact){const normalized=normalizeQuantity(amount,unit);if(normalized.unit===fact.basis)return normalized.amount;if(normalized.unit==='Stk.'&&fact.unitWeight>0)return normalized.amount*fact.unitWeight;if(fact.density>0&&normalized.unit==='ml'&&fact.basis==='g')return normalized.amount*fact.density;if(fact.density>0&&normalized.unit==='g'&&fact.basis==='ml')return normalized.amount/fact.density;return null}
 export function scaleNutrients(nutrients,factor){return Object.fromEntries(macroKeys.map(key=>[key,Number.isFinite(nutrients?.[key])?Math.round(nutrients[key]*factor*100)/100:null]))}

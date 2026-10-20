@@ -1,3 +1,4 @@
+import {migrateCatalogue,catalogueRoute} from './server/catalogue.js';
 import http from 'node:http';
 import {migrateShopping,shoppingRoute} from './server/shopping.js';
 import {migrateEmailAuth,emailAuth,emailConfig} from './server/email-auth.js';
@@ -18,7 +19,7 @@ const scrypt=promisify(scryptCallback);
 const hash=t=>createHash('sha256').update(t).digest('hex');
 export function createApp({database=':memory:',dist=path.resolve('dist'),secureCookies=false,maxUsers=2,productFetch=fetch,mailer=null,publicUrl=null,requireVerification=true,clock=Date.now}={}){
  const db=new DatabaseSync(database);db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,email TEXT UNIQUE NOT NULL,name TEXT NOT NULL,password TEXT NOT NULL,data TEXT NOT NULL DEFAULT \'{}\',revision INTEGER NOT NULL DEFAULT 0); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),expires INTEGER NOT NULL);');
- migrate(db);migrateDiary(db);migrateRecipes(db);migratePantry(db);migratePrices(db);migrateProducts(db);migrateEmailAuth(db);migrateShopping(db);
+ migrate(db);migrateDiary(db);migrateRecipes(db);migratePantry(db);migratePrices(db);migrateProducts(db);migrateEmailAuth(db);migrateShopping(db);const catalogue=migrateCatalogue(db);
  const mailAuth=emailAuth({db,mailer,publicUrl,required:requireVerification,clock});
  const limits=new Map();
  const send=(res,status,data)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data))};
@@ -57,6 +58,7 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
   if(url.pathname==='/api/me'&&req.method==='GET')return send(res,200,workspace(db,user));
   if(url.pathname==='/api/logout'&&req.method==='POST'){const t=req.headers.cookie?.match(/ag_session=([a-f0-9]{64})/)?.[1];if(t)db.prepare('DELETE FROM sessions WHERE token=?').run(hash(t));cookie(req,res,'',0);return send(res,200,{ok:true})}
   if(url.pathname==='/api/state'&&req.method==='PUT')return send(res,200,saveState(db,user,await body(req)));
+  const catalogueResult=catalogueRoute({db,path:url.pathname,method:req.method,params:url.searchParams});if(catalogueResult!==null)return send(res,200,catalogueResult);
   const shoppingResult=await shoppingRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(shoppingResult!==null)return send(res,200,shoppingResult);
   const productResult=await productRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req),fetcher:productFetch});if(productResult!==null)return send(res,200,productResult);
   const priceResult=await priceRoute({db,user,path:url.pathname,method:req.method,body:()=>body(req)});if(priceResult!==null)return send(res,200,priceResult);
@@ -71,6 +73,6 @@ export function createApp({database=':memory:',dist=path.resolve('dist'),secureC
  try{if(!(await stat(file)).isFile())file=path.join(dist,'index.html')}catch{if(path.extname(url.pathname))return send(res,404,{error:'Nicht gefunden.'});file=path.join(dist,'index.html')}
  const content=await readFile(file);const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon'};res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':file.includes('/assets/')?'public,max-age=31536000,immutable':'no-cache'});res.end(req.method==='HEAD'?undefined:content);
  }catch(e){if(!res.headersSent)send(res,e.status||500,{error:e.status?e.message:'Serverfehler. Bitte versuche es erneut.'});else res.end()}});
- return {server,close:async()=>{await mailAuth.flush();db.close()}};
+ return {server,catalogue,close:async()=>{await mailAuth.flush();db.close()}};
 }
 if(process.argv[1]&&fileURLToPath(import.meta.url)===path.resolve(process.argv[1])){const database=process.env.DATABASE_PATH||'/data/ag-fit.sqlite';if(process.env.REQUIRE_EXISTING_DATABASE==='true'){try{const existing=await stat(database);if(!existing.isFile()||!existing.size)throw Error()}catch{throw Error('Vorhandene Datenbank fehlt. Deployment gestoppt: DATABASE_PATH und bisheriges Datenvolume prüfen; keine leere Datenbank angelegt.')}}await mkdir(path.dirname(database),{recursive:true});const maxUsers=Number(process.env.MAX_USERS??2);if(!Number.isSafeInteger(maxUsers)||maxUsers<0)throw Error('MAX_USERS muss eine ganze Zahl ab 0 sein.');const mail=emailConfig();const {server,close}=createApp({database,mailer:mail.mailer,publicUrl:mail.publicUrl,requireVerification:mail.required,secureCookies:process.env.COOKIE_SECURE==='true',maxUsers});for(const signal of ['SIGTERM','SIGINT'])process.once(signal,()=>server.close(async()=>{await close();process.exit(0)}));server.listen(Number(process.env.PORT)||8080,'0.0.0.0',()=>console.log('ag fit läuft auf Port '+(process.env.PORT||8080)))}

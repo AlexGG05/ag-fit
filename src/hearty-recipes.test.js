@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-import {recipes,searchRecipes} from './nutrition.js';import {heartyRecipes} from './hearty-recipes.js';import {ingredientNutrition} from './food.js';import {recipeKind} from './recipe-kind.js';import {matchesDiet} from './planner.js';
+import {searchRecipes} from './nutrition.js';import {recipes} from './data.js';import {heartyRecipes} from './hearty-recipes.js';import {ingredientNutrition} from './food.js';import {recipeKind} from './recipe-kind.js';import {matchesDiet} from './planner.js';
 test('800 hearty additions meet separate requested quotas and preserve all 500 prior recipes',()=>{
  const previous=recipes.filter(r=>!r.id.startsWith('hearty-'));assert.equal(previous.length,500);
  assert.equal(createHash('sha256').update(JSON.stringify(previous)).digest('hex'),'29e096a19758309568697225a230d20ecc2e0cfdefff5917b781626341a80ea1');

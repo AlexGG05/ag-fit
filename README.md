@@ -1,6 +1,6 @@
 # ag fit
 
-Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 1.300 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
+Eine Ernährungs-App für euch beide – mit persönlichen Konten, gemeinsamem Haushalt, 2.500 Rezepten und euren eigenen Gerichten. Bestehende Konten, Favoriten, Pläne und SQLite-Daten bleiben beim Update erhalten. Trainingsfunktionen werden nicht wieder eingeführt.
 
 ## Neuinstallation nach gelöschtem Datenvolume
 
@@ -89,7 +89,7 @@ Ohne eingerichteten SMTP-Versand sind neue Registrierungen mit Bestätigung gesp
 ## Was die App kann
 
 - **Gemeinsam planen:** Haushalt erstellen, einmaligen Einladungscode teilen und mit dem zweiten Konto beitreten. Wochenplan, Portionen (1–6), Einkaufsliste, Vorräte, Produkte und Preise werden gemeinsam genutzt. Änderungen erscheinen auf dem anderen Gerät nach spätestens etwa fünf Sekunden oder beim erneuten Fokussieren. Profile, Ziele, Favoriten und Ernährungstagebuch bleiben persönlich. Ohne Haushalt funktioniert alles für ein Einzelkonto.
-- **Rezepte entdecken:** 1.300 hinterlegte Gerichte, Suche nach Namen, Zutaten und Tags, Filter, Favoriten und vollständige Kochanleitungen. 16 lokal mitgelieferte KI-Bilder zeigen gekennzeichnete Serviervorschläge für Gerichtskategorien, keine exakten Fotos jedes Rezepts.
+- **Rezepte entdecken:** 2.500 hinterlegte Gerichte, Suche nach Namen, Zutaten und Tags, Filter, Favoriten und vollständige Kochanleitungen. 16 lokal mitgelieferte KI-Bilder zeigen gekennzeichnete Serviervorschläge für Gerichtskategorien, keine exakten Fotos jedes Rezepts.
 - **Mahlzeiten im Profil:** Frühstück, Mittagessen und Abendbrot sind standardmäßig aktiv. Jede Mahlzeit lässt sich einzeln abwählen, auch alle drei. Die persönliche Auswahl filtert Tages-/Wochenansicht, Rezeptsuche, Favoritenansicht und Vorschläge; nur aktive Mahlzeiten zählen für automatische Planung, geplante Nährwerte, Budget und Einkauf. Im Haushalt kann jede Person eine eigene Auswahl treffen; der gemeinsame Plan bleibt gespeichert. Beim erneuten Aktivieren erscheinen bestehende Gerichte wieder. Bereits gegessene Tagebucheinträge und Einkäufe bleiben unverändert.
 - **Intelligenter Wochenplan:** beliebig viele gespeicherte Kalenderwochen (Montag bis Sonntag), wählbar per Datum oder Vor-/Zurück-Schalter. Automatisches Ausfüllen betrifft nur die gewählte Woche; manuelle Auswahlen in anderen Wochen bleiben erhalten. Rezepte können direkt für ein beliebiges Datum eingeplant werden. Je Woche sieben Tage, drei Vorschläge je Mahlzeit, automatisch freie Felder füllen, bewusst außerhalb essen. Ernährung, Zutaten-Ausschlüsse, Allergene, Vorlieben, Kochzeit sowie optional eigene Kalorien-/Proteinziele und Budget berücksichtigen. Vorräte und baldiges MHD werden bevorzugt, geplante Wiederholungen im Umfeld vermieden. Gründe stehen bei Vorschlägen; passen keine Gerichte, bleibt das Feld mit Erklärung offen. Manuelle Auswahlen werden erhalten.
 - **Eigene Rezepte:** Titel, Tags, Zutaten, Mengen, Einheiten, ursprüngliche Portionen, Dauer, Schritte und optional HTTPS-Bildadresse. Bekannte Zutaten liefern geschätzte Nährwerte; fehlende Gesamtnährwerte lassen sich ergänzen. Eigene Gerichte sind suchbar, favorisierbar und planbar. Freigabe im Haushalt ist optional, Bearbeitung nur durch die Eigentümerperson. Löschen archiviert das Gericht: bestehende Pläne und Tagebuchwerte bleiben erhalten. Ein Rezeptimport über beliebige URLs ist die ausdrücklich spätere optionale Teilfunktion; der Server ruft keine solchen URLs ab. Externe eigene Bilder lädt der Browser und sie sind offline gegebenenfalls nicht verfügbar.
@@ -103,9 +103,11 @@ Ohne eingerichteten SMTP-Versand sind neue Registrierungen mit Bestätigung gesp
 
 Nährwerte und Stückgewichte sind Schätzungen, keine medizinischen Empfehlungen. Zielwerte setzt ihr selbst. Allergenfilter nutzen hinterlegte Zutaten und Hinweise und bestätigen **keine Allergenfreiheit**: Verpackungen, zusammengesetzte Zutaten und mögliche Spuren selbst prüfen. Ungeprüfte zusammengesetzte Produkte werden bei Allergen-Ausschlüssen nicht automatisch empfohlen. MHD ist kein automatisches Wegwerfdatum.
 
-Der feste Bestand umfasst **1.300 Rezepte: 166 Frühstücke, 566 Mittagessen und 568 Abendessen**. Die jüngste Erweiterung ergänzt **100 Aufläufe, 100 Suppen und zusätzlich jeweils 300 Mittag- und Abendessen**. Aufläufe und Suppen verteilen sich je zur Hälfte auf Mittag und Abend. Dazu gehören Gulasch, Hackpfannen, Lasagne, Bratlinge, Kartoffelgerichte, Schmorgerichte und warme Ofengerichte. Der Schwerpunkt liegt auf sättigenden Mahlzeiten mit mindestens 240 g Gemüse pro neuer Portion, abwechslungsreichen Proteinquellen, moderaten Öl-/Käsemengen und Kartoffeln oder Getreidebeilagen. Es gibt auch vegetarische und vegane Varianten. Nährwerte sind Schätzungen, keine pauschale gesundheitliche Eignungszusage.
+Der feste Bestand umfasst **2.500 Rezepte**: **400 Frühstücke, 650 Mittagessen, 650 Abendessen, 300 Snacks, 200 Desserts, 200 Meal-Prep-Gerichte und 100 Getränke/Smoothies**. Die bisherigen 1.300 Rezepte, ihre IDs, Mengen und Anleitungen bleiben erhalten. Issue #2 ergänzt nur die fehlenden 1.200 Rezepte. Die 800 zuvor hinzugefügten Aufläufe, Suppen und deftigen Hauptgerichte bleiben verfügbar.
 
-Unter **Rezepte entdecken → Gerichtart** lassen sich **Aufläufe & Gratins**, **Suppen** und **deftige Hauptgerichte** gezielt auswählen und mit Suche, Mahlzeit, Zeit, Protein und Favoriten kombinieren. Auch eigene Rezepte werden anhand des Titels passend eingeordnet. Alle bisherigen 500 Rezepte und ihre IDs bleiben unverändert. Die neuen Gerichte verwenden festgelegte Zubereitungsarten mit hinterlegten Gemüsekombinationen, vollständigen Anleitungen und Mengen pro Portion; sie werden nicht bei jedem Aufruf zufällig zusammengesetzt. Die Bilder bleiben gekennzeichnete Serviervorschläge für Gerichtskategorien.
+Die Ergänzung verwendet 121 Zubereitungsfamilien mit fest zugeordneten Zusammensetzungen: unter anderem Dampfgerichte, Crêpes, Nocken, Vollkornfladen, Polenta, Taler, Puddings, Sorbets und Getränke. Unterschiedliche Hauptzutaten und Methoden erzeugen die Vielfalt; ein bloß anderer Titel, eine geänderte Mengenangabe oder eine zusätzliche Prise Gewürz zählt nicht als neues Rezept. Die Daten sind deterministisch, nicht bei jedem Aufruf zufällig zusammengesetzt.
+
+Unter **Rezepte entdecken → Gerichtart** lassen sich **Aufläufe & Gratins**, **Suppen** und **deftige Hauptgerichte** gezielt auswählen und mit Suche, Mahlzeit, Zeit, Protein und Favoriten kombinieren. Auch eigene Rezepte werden anhand des Titels passend eingeordnet. Alle bisherigen 1.300 Rezepte und ihre IDs bleiben erhalten. Die neuen Gerichte verwenden festgelegte Zubereitungsarten mit hinterlegten Gemüsekombinationen, vollständigen Anleitungen und Mengen pro Portion; sie werden nicht bei jedem Aufruf zufällig zusammengesetzt. Neue Rezepte verwenden eigene grafische Platzhalter. Bestehende KI-Bilder bleiben gekennzeichnete Serviervorschläge für Gerichtskategorien.
 
 ## Gemeinsam starten und Favoriten nutzen
 
@@ -118,7 +120,7 @@ Unter **Rezepte entdecken → Gerichtart** lassen sich **Aufläufe & Gratins**, 
 
 Standardmäßig erlaubt der Server **zwei Registrierungen**, danach bleibt nur die Anmeldung offen. Es gibt keine Standardpasswörter. Für weitere Familienmitglieder `MAX_USERS` auf beispielsweise `6` setzen; `0` erlaubt unbegrenzt viele Registrierungen. Das Limit gilt serverweit, nicht pro Haushalt. Bestehende Konten bleiben unabhängig vom Limit nutzbar. E-Mail-Verifizierung und Passwort-Wiederherstellung sind vorhanden; eine Kontolöschung ist noch nicht implementiert. Daten der ursprünglichen rein lokalen Browser-Version werden nicht automatisch importiert.
 
-Die SQLite-Erweiterungen sind additiv und werden beim Start idempotent angewendet (`schema_migrations`, acht Versionen). Vorhandene Benutzerzeilen, Passwort-Hashes, Sitzungen und beliebige bisherige JSON-Daten bleiben erhalten. Neue Haushalt-, Tagebuch-, Rezept-, Vorrats-, Preis- und Produkttabellen ergänzen sie. **Vor einem Produktionsupdate ein Backup erstellen** und das vorhandene Volume unverändert weiterverwenden. Eine alte App-Version kann die neuen Funktionen nicht anzeigen; ein Rücksprung auf das alte Image löscht deren Tabellen nicht.
+Die SQLite-Erweiterungen sind additiv und werden beim Start idempotent angewendet (`schema_migrations`, neun Versionen). Vorhandene Benutzerzeilen, Passwort-Hashes, Sitzungen und beliebige bisherige JSON-Daten bleiben erhalten. Neue Haushalt-, Tagebuch-, Rezept-, Vorrats-, Preis- und Produkttabellen ergänzen sie. **Vor einem Produktionsupdate ein Backup erstellen** und das vorhandene Volume unverändert weiterverwenden. Eine alte App-Version kann die neuen Funktionen nicht anzeigen; ein Rücksprung auf das alte Image löscht deren Tabellen nicht.
 
 ## Installation und Offline-Modus
 
@@ -253,6 +255,38 @@ Falls Port 8080 bereits belegt ist, den dort laufenden App-Container vorher stop
 Konfiguration: `PORT` (Standard 8080), `DATABASE_PATH` (Standard `/data/ag-fit.sqlite`), `MAX_USERS` (Standard 2; 0 für unbegrenzt), `COOKIE_SECURE=true` für ausschließlich HTTPS. Sitzungen laufen nach 30 Tagen ab, Passwörter werden mit individuellen Salts und scrypt gehasht. Cookies sind HttpOnly und SameSite=Lax. Die API schützt gegen fremde Origins, begrenzt Anmeldeversuche und verhindert das stille Überschreiben zwischen Geräten: Bei einem Konflikt werden weitere Speicherungen angehalten. Lokale Änderungen können als JSON gesichert werden; anschließend den Serverstand ausdrücklich laden. Geteilte Ressourcen verwenden Versionsprüfungen.
 
 Für Builds hinter einem Unternehmensproxy unterstützt das Dockerfile das optionale BuildKit-Secret `build_ca` mit einem vertrauenswürdigen CA-Zertifikat. Es wird nur während der Installation eingebunden und nicht im Image gespeichert. Normale Docker-Hosts und GitHub Actions benötigen es nicht.
+
+## Rezeptimport, Quellen und Validierung (Issue #2)
+
+Der Server importiert den mitgelieferten Katalog beim Start automatisch in `builtin_recipes` (Migration 9). Eindeutige IDs, normalisierte Namen und normalisierte Zutatenkombinationen verhindern Duplikate. Ein Import-Fingerprint überspringt unveränderte Wiederholungen. Systemrezepte und private/haushaltsweite `custom_recipes` sind getrennte Tabellen; Konten, Favoriten, Pläne, Sitzungen und Tagebuchwerte werden nicht überschrieben. Die bisherigen Rezeptobjekte bleiben in den Quelldateien unverändert; zusätzliche Katalogmetadaten werden separat ergänzt.
+
+```sh
+npm run recipes:validate                          # keine Datenbankänderung
+DATABASE_PATH=./.data/ag-fit.sqlite npm run recipes:seed
+DATABASE_PATH=./.data/ag-fit.sqlite npm run recipes:seed # erneut: 0 neue Einträge
+npm test
+npm run build
+npm run test:browser
+```
+
+Im laufenden Container ist ein manueller Import bei Bedarf mit `docker compose exec ag-fit npm run recipes:seed` möglich; normalerweise genügt das Deployment mit demselben `/data`-Volume. Kein zusätzliches Import-Volume oder Internetzugriff ist erforderlich. Die Tests verwenden ausschließlich isolierte temporäre Datenbanken.
+
+**API:** nach Anmeldung `GET /api/catalogue?category=snack&limit=24&offset=0&q=Hafer`. Antworten enthalten `total`, `limit`, `offset`, Kategorien und Rezepte. Maximal 100 Einträge pro Seite; `GET /api/catalogue/<id>` liefert ein vollständiges Rezept. Weitere Filter: `diet=Vegan|Vegetarisch|Mischkost`, `kind=casserole|soup|hearty|other`, `quick=true`, `highProtein=true`. Suche normalisiert Groß-/Kleinschreibung, Umlaute und Satzzeichen. Die UI lädt den öffentlichen statischen Bestand lokal, zeigt zunächst 18 Treffer und lädt weitere auf Knopfdruck; Suchtexte werden zwischengespeichert. Persönliche Rezepte kommen ausschließlich aus dem berechtigten Workspace hinzu.
+
+**Kategorien und Portionen:** Zutatenmengen und Nährwerte beziehen sich auf eine Portion (`servings=baseServings=1`). Die App multipliziert Zutaten für eure eingestellte Portionszahl; Tagebuchmengen werden separat skaliert. Snacks, Desserts und Getränke lassen sich im Rezeptdialog in eine aktivierte Tagesmahlzeit einplanen. Meal-Prep ist eine eigene Katalogkategorie mit Zuordnung zu Mittag oder Abend, kein zusätzlicher verpflichtender Tages-Slot. Meal-Prep-Portionen zügig kühlen, innerhalb von 24 Stunden essen oder noch am Kochtag einfrieren; eine Wochenplanung bedeutet keine einwöchige Kühlschrankhaltbarkeit.
+
+**Nährwertquelle:** Die 1.200 Ergänzungen werden aus 145 zugeordneten Lebensmitteln der **USDA National Nutrient Database for Standard Reference, Release 28** berechnet. Jeder Referenzeintrag in `src/catalogue/usda-sr28.json` enthält NDB-Nummer, originalen englischen Lebensmittelnamen und kcal/Protein/Kohlenhydrate/Fett je 100 g. Quelle: [USDA SR28-Dokumentation](https://www.ars.usda.gov/ARSUserFiles/80400525/Data/SR/SR28/sr28_doc.pdf); reproduzierbarer [Datenmirror mit festem Commit](https://github.com/alyssaq/usda-sqlite/tree/1e457b599af101ce463a195867574eba16c81acb/data). Es werden ausschließlich US-Regierungs-Nährwertdaten übernommen, keine fremden Rezepttexte oder Bilder. Die Rezepttexte und grafischen Platzhalter wurden für AG Fit erstellt.
+
+Die deutschen Zuordnungen sind Referenzprodukte: etwa generischer Kürbis für Hokkaido oder rohe Linsen für rote Linsen. Sorte, Marke, Abtropfgewicht, Wasserverlust und Garverfahren beeinflussen tatsächliche Werte. Flüssigkeitsdichten sind dokumentierte Näherungen im Importskript. Daher bleiben alle Werte ausdrücklich **Schätzungen**. Bestehende Nährwertangaben bleiben als `legacy-estimate` erhalten; die neuen Berechnungen tragen `usda-sr28`. Unbekannte Werte werden `null` und mit fehlendem Zutatennamen gekennzeichnet, niemals stillschweigend 0. Allergene sind aus Zutaten abgeleitet; Verpackungs- und Spurenangaben müssen geprüft werden.
+
+Optional die Referenzdatei aus den mit SHA-256 geprüften Quelldateien reproduzieren (Python 3 und Netzwerkzugriff auf `raw.githubusercontent.com` erforderlich):
+
+```sh
+python3 scripts/import-usda.py --cache /tmp/ag-fit-usda
+npm run recipes:validate
+```
+
+Die automatischen Tests prüfen die sieben Zielquoten, Pflichtfelder, Namens-/Zutaten-Duplikate, unveränderte Bestandsrezepte, nachrechenbare Makronährstoffe, Portionsskalierung, paginierten Abruf aller 2.500 Datenbankrezepte, Mehrfachimport und Datenbestand nach Neustart. Browserprüfungen decken die sieben Kategorien, kombinierte Suche, Rezeptdetails, Platzhalter und Planung auf Mobilgeräten ab.
 
 ## Hinweise
 
