@@ -10,7 +10,7 @@
     "test": "node --test",
     "start": "node server.js",
     "dev:server": "DATABASE_PATH=./.data/ag-fit.sqlite node server.js",
-    "test:browser": "node scripts/browser-check.cjs && node scripts/browser-email-check.cjs"
+    "test:browser": "node scripts/browser-check.cjs && node scripts/browser-email-check.cjs && node scripts/browser-planning-check.cjs"
   },
   "dependencies": {
     "@zxing/browser": "^0.1.5",
