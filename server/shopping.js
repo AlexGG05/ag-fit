@@ -1,3 +1,4 @@
+import {activePlan} from '../src/meals.js';
 import {randomUUID} from 'node:crypto';
 import {fail,text,transaction,membership} from './workspace.js';
 import {scope,pantryRows} from './pantry.js';
@@ -20,7 +21,7 @@ export async function shoppingRoute({db,user,path,method,body}){
    if(previous){const p=purchase(previous);if(p.start!==b.start||p.end!==b.end||canonicalName(p.name)!==canonicalName(name)||p.unit!==q.unit||Math.abs(p.amount-q.amount)>.001)fail(409,'Diese Buchungskennung gehört zu einem anderen Einkauf.');return {purchase:p,duplicate:true}}
    const fresh=db.prepare('SELECT * FROM users WHERE id=?').get(user.id),house=membership(db,user.id);const personal=JSON.parse(fresh.data),data=house?JSON.parse(house.data):personal;
    const people=Number(house?data['ag-servings']??2:personal['ag-profile']?.people??2);if(!Number.isInteger(people)||people<1||people>6)fail(400,'Bitte eine Portionszahl von 1 bis 6 einstellen.');
-   const items=shoppingWithPantry(planInRange(data['ag-plan']||{},b.start,b.end),people,[...recipes,...ownRecipes(db,user.id)],pantryRows(db,user.id));
+   const items=shoppingWithPantry(planInRange(activePlan(data['ag-plan'],personal['ag-profile']),b.start,b.end),people,[...recipes,...ownRecipes(db,user.id)],pantryRows(db,user.id));
    const item=items.find(i=>canonicalName(i.name)===canonicalName(name)&&i.unit===q.unit);
    if(!item||item.amount<=0||Math.abs(item.amount-q.amount)>.01)fail(409,'Einkaufsliste oder Vorräte wurden geändert. Bitte den aktuellen Stand laden und die benötigte Menge erneut bestätigen.');
    const id=randomUUID(),pantryId=randomUUID(),at=new Date().toISOString();
